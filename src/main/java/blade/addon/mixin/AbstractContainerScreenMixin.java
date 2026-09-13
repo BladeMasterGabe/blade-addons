@@ -95,7 +95,7 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
 
     @Inject(method = "slotClicked", at = @At("HEAD"), cancellable = true)
     public void slotClicked(Slot slot, int slotId, int buttonNum, ContainerInput containerInput, CallbackInfo ci) {
-        if (Events.ON_SLOT_CLICKED.invoke(slotEvent -> slotEvent.onSlot(slot, slotId, buttonNum, containerInput))) {
+        if (Events.ON_SLOT_CLICKED.invoke(slotEvent -> slotEvent.onSlot(slot, slotId, buttonNum, containerInput, this))) {
             ci.cancel();
         }
     }

@@ -6,7 +6,7 @@ import blade.addon.utils.config.values.Dungeons;
 import blade.addon.utils.events.Events;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.world.Container;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.ItemStack;
@@ -14,67 +14,38 @@ import net.minecraft.world.item.Items;
 
 public class RerollBlocker {
 
-    //,"Emerald", "Diamond", "Gold", "Wood"
-    private static final String[] CHESTS = {"Bedrock", "Obsidian"};
-    private static final String[] BLOCKED_REROLLS = {"Recombobulator", "Wither Shield", "Implosion", "Shadow Warp", "Necron's Handle", "Star", "Dark Claymore", "Dye", "Giant's Sword", "Shadow fury"};
+    private static final String[] BLOCKED_REROLLS = {"Recombobulator ", "Wither Shield", "Implosion", "Shadow Warp", "Necron's Handle", "Star", "Dark Claymore", "Dye", "Giant's Sword", "Shadow fury"};
 
     private static boolean blockClick = false;
     private static int containerId = Integer.MIN_VALUE;
 
     public static void init() {
 
-        Events.ON_SCREEN.register(screen -> {
-            if (!Dungeons.blockExpensiveRerolls || !Location.in(Location.DUNGEON_HUB)) return false;
-
-            blockClick = false;
+        Events.ON_SCREEN.register(_ -> {
             containerId = Integer.MIN_VALUE;
-
-            if (screen instanceof ContainerScreen containerScreen) {
-
-                Component title = containerScreen.getTitle();
-                if (title == null) return false;
-
-                if (!isValidGUI(title.getString())) return false;
-
-                ChestMenu menu = containerScreen.getMenu();
-                containerId = menu.containerId;
-            }
             return false;
         });
 
-        Events.ON_PACKET.register(packet -> {
-            if (!Dungeons.blockExpensiveRerolls || !Location.in(Location.DUNGEON_HUB)) return false;
-
-            if (blockClick) return false;
-            if (packet instanceof ClientboundContainerSetSlotPacket containerSetSlotPacket) {
-                if (containerSetSlotPacket.getContainerId() != containerId) return false;
-                if (containerSetSlotPacket.getSlot() >= 54) return false;
-
-                ItemStack itemStack = containerSetSlotPacket.getItem();
-                Component component = itemStack.getCustomName();
-                if (component == null) return false;
-
-                String blocked = getBlockedItem(component.getString());
-                if (blocked != null) {
-                    blockClick = true;
-                    Misc.addChatMessage(Component.literal("Blocked reroll {name: " + blocked + "} {Item name: " + component.getString() + "}"));
-                }
-
-            }
-
-            return false;
-        });
-
-        Events.ON_SLOT_CLICKED.register((slot, slotId, _, containerInput) -> {
-            Misc.addChatMessage(Component.literal(slotId + " " + containerInput));
+        Events.ON_SLOT_CLICKED.register((slot, slotId, _, containerInput, screen) -> {
             if (!Dungeons.blockExpensiveRerolls || !Location.in(Location.DUNGEON_HUB)) return false;
             if (containerInput == ContainerInput.THROW) return false;
-            Misc.addChatMessage(Component.literal(slot.getItem().getItem().toString()));
             if (slotId != 50 || slot.getItem().getItem() != Items.FEATHER) return false;
+
+            if (screen instanceof ContainerScreen containerScreen) {
+                ChestMenu menu = containerScreen.getMenu();
+                if (menu == null) return false;
+                Container container = menu.getContainer();
+                if (container == null) return false;
+
+                if (menu.containerId != containerId) {
+                    scanContainer(container);
+                    containerId = menu.containerId;
+                }
+            }
+
             ItemStack itemStack = slot.getItem();
             Component customName = itemStack.getCustomName();
             if (customName == null) return false;
-            Misc.addChatMessage(customName);
             if (!customName.getString().contains("Reroll Chest")) return false;
 
             return blockClick;
@@ -82,10 +53,28 @@ public class RerollBlocker {
 
     }
 
-    private static boolean isValidGUI(String title) {
-        for (String name : CHESTS) {
-            if (name.equalsIgnoreCase(title)) return true;
+    private static void scanContainer(Container container) {
+        for (int i = 0; i < 54; i++) {
+           ItemStack itemStack = container.getItem(i);
+           if (scanItem(itemStack)) {
+               blockClick = true;
+               return;
+           }
         }
+
+        blockClick = false;
+    }
+
+    private static boolean scanItem(ItemStack itemStack) {
+        Component component = itemStack.getCustomName();
+        if (component == null) return false;
+
+        String blocked = getBlockedItem(component.getString());
+        if (blocked != null) {
+            Misc.addChatMessage(Component.literal("Blocked reroll {name: " + blocked + "} {Item name: " + component.getString() + "}"));
+            return true;
+        }
+
         return false;
     }
 

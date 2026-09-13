@@ -19,7 +19,7 @@ public class BlockPetMenu {
             return false;
         });
 
-        Events.ON_SLOT_CLICKED.register((slot,slotId, button, containerInput) -> {
+        Events.ON_SLOT_CLICKED.register((_,slotId, button, _, _) -> {
             if (inPetMenu && button == 1 && Dungeons.blockRemovingPet && Location.inDungeon()) {
                 return slotId >= 9 && slotId <= 44;
             }
