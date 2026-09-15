@@ -14,7 +14,7 @@ import net.minecraft.world.item.Items;
 
 public class RerollBlocker {
 
-    private static final String[] BLOCKED_REROLLS = {"Recombobulator ", "Wither Shield", "Implosion", "Shadow Warp", "Necron's Handle", "Star", "Dark Claymore", "Dye", "Giant's Sword", "Shadow fury"};
+    private static final String[] BLOCKED_REROLLS = {"Recombobulator ", "Wither Shield", "Implosion", "Shadow Warp", "Necron's Handle", "Star", "Dark Claymore", "Dye", "Giant's Sword", "Shadow Fury"};
 
     private static boolean blockClick = false;
     private static int containerId = Integer.MIN_VALUE;
