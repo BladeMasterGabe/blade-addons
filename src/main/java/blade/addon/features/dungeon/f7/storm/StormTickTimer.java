@@ -13,7 +13,7 @@ import java.util.List;
 public class StormTickTimer extends CombineableTickTimer {
 
     private static final int COUNTDOWN_DURATION = 5 * 20;
-    private static final int CRUSH_TICK = 31 * 20;
+    private static final int CRUSH_TICK = 30 * 20;
 
     public StormTickTimer() {
         super("Storm tick timer");
