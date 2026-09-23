@@ -1,6 +1,5 @@
 package blade.addon.features.dungeon.f7.dragons;
 
-import blade.addon.utils.dungeon.DungeonClass;
 import net.minecraft.world.phys.Vec3;
 
 public enum Dragon {
@@ -15,6 +14,7 @@ public enum Dragon {
     final int archPrio;
     final int bersPrio;
     final Vec3 spawnPos;
+    int tick = 0;
 
     Dragon(int color, int archPrio, int bersPrio, Vec3 spawnPos) {
         this.color = color;
@@ -40,32 +40,6 @@ public enum Dragon {
                 }
             } else if (x == 56) {
                 return Dragon.PURPLE;
-            }
-        }
-        return Dragon.NONE;
-    }
-
-    public static Dragon getPrio(Dragon dragon1, Dragon dragon2) {
-
-        if (DungeonClass.isArchTeam()) {
-            if (DungeonClass.isClass(DungeonClass.HEALER)) {
-                if (dragon1 == Dragon.PURPLE) {
-                    return dragon2;
-                } else if (dragon2 == Dragon.PURPLE) {
-                    return dragon1;
-                }
-            }
-
-            if (dragon1.archPrio < dragon2.archPrio) {
-                return dragon1;
-            } else {
-                return dragon2;
-            }
-        } else if (DungeonClass.isBersTeam()) {
-            if (dragon1.bersPrio < dragon2.bersPrio) {
-                return dragon1;
-            } else {
-                return dragon2;
             }
         }
         return Dragon.NONE;

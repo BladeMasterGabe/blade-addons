@@ -5,7 +5,6 @@ import blade.addon.utils.Location;
 import blade.addon.utils.config.components.Categories;
 import blade.addon.utils.config.components.CombineableTickTimer;
 import blade.addon.utils.config.values.Floor7;
-import blade.addon.utils.dungeon.Phase;
 import config.practical.hud.HUDCategory;
 
 import java.util.List;
@@ -36,7 +35,7 @@ public class RelicTimer extends CombineableTickTimer {
 
     @Override
     public boolean shouldRender() {
-        return Floor7.enableRelicStartTimer && Location.inDungeon() && Phase.inP5() && RelicSpawn.getTick() > -1 && !Floor7.replaceWithProgressBar;
+        return Floor7.enableRelicStartTimer && Location.inDungeon() && RelicSpawn.getTick() > -1 && !Floor7.replaceWithProgressBar;
 
     }
 

@@ -1,9 +1,7 @@
 package blade.addon.utils.dungeon;
 
-import blade.addon.features.dungeon.f7.dragons.DragonSpawn;
 import blade.addon.utils.Misc;
 import blade.addon.utils.config.values.Dungeons;
-import blade.addon.utils.config.values.Floor7;
 import blade.addon.utils.data.EntityUtil;
 import blade.addon.utils.events.Events;
 import net.minecraft.network.chat.Component;
@@ -142,14 +140,6 @@ public enum DungeonClass {
         return currentClass == dungeonClass;
     }
 
-    public static boolean isArchTeam() {
-        return currentClass == DungeonClass.ARCHER || currentClass == DungeonClass.TANK || (currentClass == DungeonClass.HEALER && Floor7.healerTeam == DragonSpawn.Team.ARCHER_TEAM);
-    }
-
-    public static boolean isBersTeam() {
-        return currentClass == DungeonClass.BERSERK || currentClass == DungeonClass.MAGE || (currentClass == DungeonClass.HEALER && Floor7.healerTeam == DragonSpawn.Team.BERS_TEAM);
-    }
-
     private static void reset() {
         currentClass = null;
         nameClassMap.clear();
@@ -157,8 +147,6 @@ public enum DungeonClass {
 
     public static void printClasses() {
         Misc.addChatMessage(Component.literal("Classes"));
-        nameClassMap.forEach((name, clazz) -> {
-            Misc.addChatMessage(Component.literal("Name: " + name + "Class: " + (clazz != null? clazz.name(): null)));
-        });
+        nameClassMap.forEach((name, clazz) -> Misc.addChatMessage(Component.literal("Name: " + name + "Class: " + (clazz != null? clazz.name(): null))));
     }
 }

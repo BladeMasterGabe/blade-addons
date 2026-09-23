@@ -1,7 +1,6 @@
 package blade.addon.utils.config;
 
 import blade.addon.features.dungeon.f7.BossWaypoints;
-import blade.addon.features.dungeon.f7.dragons.DragonSpawn;
 import blade.addon.features.dungeon.f7.invincibility.InvincibilityTimer;
 import blade.addon.features.filter.FilterList;
 import blade.addon.features.highlight.MobHighlight;
@@ -245,7 +244,6 @@ public class Config {
         ConfigSection dragon = new ConfigSection(Component.literal("Dragons"));
         dragon.add(new ConfigBool(Component.literal("Enable Dragon spawn timers"), () -> Floor7.dragSpawnTimers, bool -> Floor7.dragSpawnTimers = bool));
         dragon.add(new ConfigBool(Component.literal("Send sound on dragon spawn"), () -> Floor7.sendSoundOnDragSpawn, bool -> Floor7.sendSoundOnDragSpawn = bool));
-        dragon.add(new ConfigOptions<>(Component.literal("Healer prio"), DragonSpawn.Team.values(), () -> Floor7.healerTeam, team -> Floor7.healerTeam = team));
         dragon.add(new ConfigBool(Component.literal("Render dragon health"), () -> Floor7.dragonHealth, bool -> Floor7.dragonHealth = bool));
         dragon.add(new ConfigBool(Component.literal("Render dragon spawn tracer"), () -> Floor7.dragonTracer, bool -> Floor7.dragonTracer = bool));
         floor7.add(dragon);
