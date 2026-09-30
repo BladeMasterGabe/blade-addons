@@ -36,7 +36,8 @@ public class RelicProgressBar extends HUDComponent {
 
     @Override
     public boolean shouldRender() {
-        return Floor7.enableRelicStartTimer && Location.inDungeon() && RelicSpawn.getTick() > -1 && Floor7.replaceWithProgressBar;
+        return false;
+        //return Floor7.enableRelicStartTimer && Location.inDungeon() && RelicSpawn.getTick() > -1 && Floor7.replaceWithProgressBar;
     }
 
     @Override

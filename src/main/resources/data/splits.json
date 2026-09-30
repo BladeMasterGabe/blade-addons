@@ -613,12 +613,12 @@
     {
       "name": "Necron",
       "start": "[BOSS] Necron: You went further than any human before, congratulations.",
-      "end": "[BOSS] Necron: ARGH!",
+      "end": "[BOSS] Wither King: You... again?",
       "color": 16733525
     },
     {
       "name": "Dragons",
-      "start": "[BOSS] Necron: ARGH!",
+      "start": "[BOSS] Wither King: You... again?",
       "end": "some dummy string",
       "color": 11141120
     },
