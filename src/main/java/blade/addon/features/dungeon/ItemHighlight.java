@@ -5,9 +5,7 @@ import blade.addon.utils.Location;
 import blade.addon.utils.config.values.Dungeons;
 import blade.addon.utils.dungeon.Phase;
 import blade.addon.utils.rendering.RenderUtils;
-import blade.addon.utils.rendering.RenderingEvents;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
@@ -48,16 +46,15 @@ public class ItemHighlight {
         });
 
         ClientEntityEvents.ENTITY_UNLOAD.register((entity, world) -> {
-            if (entity == null) return;
             if (entity instanceof ItemEntity item) {
                 trackedItems.remove(item);
             }
         });
 
-        RenderingEvents.FILLED_NO_DEPTH.register(ItemHighlight::render);
+        LevelRenderEvents.COLLECT_SUBMITS.register(ItemHighlight::render);
     }
 
-    private static void render(LevelRenderContext context, PoseStack matrixStack, VertexConsumer consumer) {
+    private static void render(LevelRenderContext context) {
         if (!Dungeons.highlightItems) return;
         double tickProgress = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
 
@@ -70,7 +67,7 @@ public class ItemHighlight {
             EntityDimensions dimension = itemEntity.getDimensions(itemEntity.getPose());
             AABB box = dimension.makeBoundingBox(x, y, z).inflate(0.1).move(0, 0.05, 0);
             float[] color = RenderUtils.toFloats(getColor(itemEntity));
-            RenderUtils.renderFilledBox(matrixStack, consumer, box, color);
+            RenderUtils.drawFilledBox(context, box, color, true);
         });
     }
 
@@ -78,7 +75,6 @@ public class ItemHighlight {
         if (!Dungeons.highlightItems || !Location.inDungeon() || Phase.inBoss()) return false;
 
         Component itemText = item.getItem().getHoverName();
-        if (itemText == null) return false;
         String itemName = itemText.getString();
 
         return ITEMS.contains(itemName);

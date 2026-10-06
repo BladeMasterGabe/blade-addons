@@ -6,9 +6,7 @@ import blade.addon.utils.config.values.Floor7;
 import blade.addon.utils.data.EntityUtil;
 import blade.addon.utils.events.Events;
 import blade.addon.utils.rendering.RenderUtils;
-import blade.addon.utils.rendering.RenderingEvents;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.minecraft.network.chat.Component;
@@ -33,7 +31,7 @@ public class DragonHealth {
 
     public static void init() {
 
-        Events.ON_ENTITY_SPAWNED.register((entity, world) -> {
+        Events.ON_ENTITY_SPAWNED.register((entity, _) -> {
             if (!Location.inDungeon()) return false;
 
             if (entity instanceof EnderDragon dragon) {
@@ -43,9 +41,9 @@ public class DragonHealth {
             return false;
         });
 
-        ClientTickEvents.END_LEVEL_TICK.register(world -> dragons.removeIf(dataHolder -> dataHolder.dragon.isRemoved()));
-        RenderingEvents.FILLED.register(DragonHealth::render);
-        Events.ON_LOCATION_CHANGE.register(newLocation -> {
+        ClientTickEvents.END_LEVEL_TICK.register(_ -> dragons.removeIf(dataHolder -> dataHolder.dragon.isRemoved()));
+        LevelRenderEvents.COLLECT_SUBMITS.register(DragonHealth::render);
+        Events.ON_LOCATION_CHANGE.register(_ -> {
             reset();
             return false;
         });
@@ -62,7 +60,7 @@ public class DragonHealth {
         return Constants.RED;
     }
 
-    private static void render(LevelRenderContext context, PoseStack matrixStack, VertexConsumer consumer) {
+    private static void render(LevelRenderContext context) {
         if (!Floor7.dragonHealth) return;
 
         dragons.forEach(dataHolder -> {
@@ -78,10 +76,8 @@ public class DragonHealth {
 
             if (health == 0) return;
             Vec3 pos = EntityUtil.getLerpedPos(dragon);
-            RenderUtils.renderText(context, matrixStack, Component.literal(RenderUtils.formatNumber(health)).withColor(getColor(health)), pos, 5);
+            RenderUtils.renderText(context, Component.literal(RenderUtils.formatNumber(health)).withColor(getColor(health)), pos, 5);
 
         });
-
     }
-
 }

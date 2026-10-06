@@ -59,8 +59,7 @@ public class DragonSpawn {
         if (packet.getYDist() != 3) return false;
         if (packet.getZDist() != 2) return false;
         if (packet.getX() % 1 != 0) return false;
-        if (packet.getZ() % 1 != 0) return false;
-        return true;
+        return packet.getZ() % 1 == 0;
     }
 
     private static void resetInfo() {

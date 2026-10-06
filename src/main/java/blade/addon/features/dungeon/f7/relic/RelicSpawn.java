@@ -10,10 +10,8 @@ import blade.addon.utils.debug.Debug;
 import blade.addon.utils.dungeon.Phase;
 import blade.addon.utils.events.Events;
 import blade.addon.utils.rendering.RenderUtils;
-import blade.addon.utils.rendering.RenderingEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import blade.addon.utils.times.PersonalBests;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.minecraft.ChatFormatting;
@@ -144,7 +142,7 @@ public class RelicSpawn {
 
 
         Events.ON_BLOCK_INTERACTION.register(RelicSpawn::blockInteraction);
-        RenderingEvents.FILLED.register(RelicSpawn::worldRender);
+        LevelRenderEvents.COLLECT_SUBMITS.register(RelicSpawn::worldRender);
 
     }
 
@@ -241,7 +239,7 @@ public class RelicSpawn {
         Misc.addChatMessage(Component.literal("Relic: " + pickedupRelic));
     }
 
-    private static void worldRender(LevelRenderContext context, PoseStack matrixStack, VertexConsumer consumer) {
+    private static void worldRender(LevelRenderContext context) {
         if (pickedupRelic == null || !Floor7.renderRelicHighlight) return;
 
         AABB box = pickedupRelic.box;

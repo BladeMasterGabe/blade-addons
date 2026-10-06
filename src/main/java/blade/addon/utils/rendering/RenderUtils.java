@@ -13,6 +13,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.feature.TextFeatureRenderer;
+import net.minecraft.util.LightCoordsUtil;
+import net.fabricmc.fabric.api.client.rendering.v1.SubmitRenderPhases;
 import net.minecraft.gizmos.GizmoStyle;
 import net.minecraft.gizmos.Gizmos;
 import net.minecraft.network.chat.Component;
@@ -39,7 +42,6 @@ public class RenderUtils {
 
     public static void drawText(GuiGraphicsExtractor graphics, HUDComponent component, Component text, int color) {
         Font textRenderer = Minecraft.getInstance().font;
-        if (textRenderer == null) return;
         graphics.text(textRenderer, text, component.getScaledX(), component.getScaledY(), color, true);
     }
 
@@ -52,13 +54,11 @@ public class RenderUtils {
 
     public static void drawCenteredText(GuiGraphicsExtractor graphics, HUDComponent component, Component text) {
         Font textRenderer = Minecraft.getInstance().font;
-        if (textRenderer == null) return;
         drawCenteredText(graphics, textRenderer, text, component.getScaledX(), component.getScaledY(), component.getWidth(), 0xffffffff);
     }
 
     public static void drawCenteredText(GuiGraphicsExtractor graphics, HUDComponent component, Component text, int color) {
         Font textRenderer = Minecraft.getInstance().font;
-        if (textRenderer == null) return;
         drawCenteredText(graphics, textRenderer, text, component.getScaledX(), component.getScaledY(), component.getWidth(), color);
     }
 
@@ -84,31 +84,33 @@ public class RenderUtils {
 
     public static void drawPrefixedText(HUDComponent component, GuiGraphicsExtractor graphics, String prefix, String text) {
         Font textRenderer = Minecraft.getInstance().font;
-        if (textRenderer == null) return;
 
         Component drawnText = Component.literal(prefix + ": ").withColor(ExtraOptions.timerPrefixColor).append(Component.literal(text).withColor(0xffffffff));
         graphics.text(textRenderer, drawnText, component.getScaledX(), component.getScaledY(), 0xffffffff, true);
     }
 
-    public static void renderText(LevelRenderContext context, PoseStack matrices, Component text, double x, double y, double z, float scale) {
-        Minecraft client = Minecraft.getInstance();
-        Font textRenderer = client.font;
-        LocalPlayer player = client.player;
-        if (player == null) return;
-
-        matrices.pushPose();
-        matrices.translate(x, y, z);
-        matrices.mulPose(context.levelState().cameraRenderState.orientation);
-        matrices.scale(TEXT_SCALE * scale, -TEXT_SCALE * scale, TEXT_SCALE * scale);
-
-        float halfWidth = textRenderer.width(text.getString()) / 2f;
-
-        context.submitNodeCollector().submitText(matrices, -halfWidth, 0, text.getVisualOrderText(), true,Font.DisplayMode.SEE_THROUGH, 0, 15728880, 0 ,0);
-        matrices.popPose();
+    private static PoseStack cameraRelativePose(LevelRenderContext context, double x, double y, double z) {
+        Vec3 camera = context.levelState().cameraRenderState.pos;
+        PoseStack stack = context.poseStack();
+        stack.pushPose();
+        stack.translate(x - camera.x, y - camera.y, z - camera.z);
+        return stack;
     }
 
-    public static void renderText(LevelRenderContext context, PoseStack matrices, Component text, Vec3 pos, float scale) {
-        renderText(context, matrices, text, pos.x, pos.y, pos.z, scale);
+    public static void renderText(LevelRenderContext context, Component text, double x, double y, double z, float scale) {
+        PoseStack stack = cameraRelativePose(context, x, y, z);
+        stack.mulPose(context.levelState().cameraRenderState.orientation);
+        stack.scale(TEXT_SCALE * scale, -TEXT_SCALE * scale, TEXT_SCALE * scale);
+
+        float halfWidth = Minecraft.getInstance().font.width(text) / 2f;
+        context.submitNodeCollector().submitCustom(SubmitRenderPhases.AFTER_TERRAIN,
+                new TextFeatureRenderer.Submit(new Matrix4f(stack.last().pose()), -halfWidth, 0f, text.getVisualOrderText(),
+                        true, Font.DisplayMode.SEE_THROUGH, LightCoordsUtil.FULL_BRIGHT, -1, 0, 0));
+        stack.popPose();
+    }
+
+    public static void renderText(LevelRenderContext context, Component text, Vec3 pos, float scale) {
+        renderText(context, text, pos.x, pos.y, pos.z, scale);
     }
 
     public static void renderLineTo(LevelRenderContext context, double x, double y, double z, int color) {
@@ -137,6 +139,30 @@ public class RenderUtils {
             if (num >= 1e3) return String.format("%.1fk", num / 1e3);
         }
         return num + "";
+    }
+
+    public static void drawFilledBox(LevelRenderContext context, AABB box, float[] rgba) {
+        drawFilledBox(context, box, rgba, false);
+    }
+
+    public static void drawFilledBox(LevelRenderContext context, AABB box, float[] rgba, boolean throughWalls) {
+        if (rgba[3] == 0) return;
+        PoseStack stack = cameraRelativePose(context, 0, 0, 0);
+        context.submitNodeCollector().submitCustomGeometry(stack, throughWalls ? RenderLayers.FILLED_ESP : RenderLayers.FILLED,
+                (pose, consumer) -> fillBox(pose.pose(), consumer, box, rgba));
+        stack.popPose();
+    }
+
+    public static void drawOutlinedBox(LevelRenderContext context, AABB box, float[] rgba) {
+        drawOutlinedBox(context, box, rgba, false);
+    }
+
+    public static void drawOutlinedBox(LevelRenderContext context, AABB box, float[] rgba, boolean throughWalls) {
+        if (rgba[3] == 0) return;
+        PoseStack stack = cameraRelativePose(context, 0, 0, 0);
+        context.submitNodeCollector().submitCustomGeometry(stack, throughWalls ? RenderLayers.LINE_ESP : RenderLayers.LINE,
+                (pose, consumer) -> outlineBox(pose.pose(), consumer, box, rgba, MobHighlight.outlineWidth));
+        stack.popPose();
     }
 
     private static void quad(Matrix4f matrix,
@@ -204,10 +230,7 @@ public class RenderUtils {
                 .setNormal(0, 1, 0).setLineWidth(width);
     }
 
-    public static void renderOutlinedBox(PoseStack matrices,
-                                       VertexConsumer consumer,
-                                       AABB box,
-                                       float[] rgba) {
+    private static void outlineBox(Matrix4f matrix, VertexConsumer consumer, AABB box, float[] rgba, float width) {
 
 
         if (rgba[3] == 0) return;
@@ -216,7 +239,6 @@ public class RenderUtils {
         float b = rgba[2];
         float a = rgba[3];
 
-        Matrix4f matrix = matrices.last().pose();
 
         double minX = box.minX;
         double minY = box.minY;
@@ -225,28 +247,25 @@ public class RenderUtils {
         double maxY = box.maxY;
         double maxZ = box.maxZ;
 
-        horizontalLine(matrix, consumer, minX, minY, minZ, minX, maxY, minZ, r, g, b, a, MobHighlight.outlineWidth);
-        horizontalLine(matrix, consumer, maxX, minY, minZ, maxX, maxY, minZ, r, g, b, a, MobHighlight.outlineWidth);
-        horizontalLine(matrix, consumer, minX, minY, maxZ, minX, maxY, maxZ, r, g, b, a, MobHighlight.outlineWidth);
-        horizontalLine(matrix, consumer, maxX, minY, maxZ, maxX, maxY, maxZ, r, g, b, a, MobHighlight.outlineWidth);
+        horizontalLine(matrix, consumer, minX, minY, minZ, minX, maxY, minZ, r, g, b, a, width);
+        horizontalLine(matrix, consumer, maxX, minY, minZ, maxX, maxY, minZ, r, g, b, a, width);
+        horizontalLine(matrix, consumer, minX, minY, maxZ, minX, maxY, maxZ, r, g, b, a, width);
+        horizontalLine(matrix, consumer, maxX, minY, maxZ, maxX, maxY, maxZ, r, g, b, a, width);
 
-        verticalLine(matrix, consumer, minX, maxY, minZ, maxX, maxY, minZ, r, g, b, a, MobHighlight.outlineWidth);
-        verticalLine(matrix, consumer, maxX, maxY, minZ, maxX, maxY, maxZ, r, g, b, a, MobHighlight.outlineWidth);
-        verticalLine(matrix, consumer, maxX, maxY, maxZ, minX, maxY, maxZ, r, g, b, a, MobHighlight.outlineWidth);
-        verticalLine(matrix, consumer, minX, maxY, maxZ, minX, maxY, minZ, r, g, b, a, MobHighlight.outlineWidth);
+        verticalLine(matrix, consumer, minX, maxY, minZ, maxX, maxY, minZ, r, g, b, a, width);
+        verticalLine(matrix, consumer, maxX, maxY, minZ, maxX, maxY, maxZ, r, g, b, a, width);
+        verticalLine(matrix, consumer, maxX, maxY, maxZ, minX, maxY, maxZ, r, g, b, a, width);
+        verticalLine(matrix, consumer, minX, maxY, maxZ, minX, maxY, minZ, r, g, b, a, width);
 
-        verticalLine(matrix, consumer, minX, minY, minZ, maxX, minY, minZ, r, g, b, a, MobHighlight.outlineWidth);
-        verticalLine(matrix, consumer, maxX, minY, minZ, maxX, minY, maxZ, r, g, b, a, MobHighlight.outlineWidth);
-        verticalLine(matrix, consumer, maxX, minY, maxZ, minX, minY, maxZ, r, g, b, a, MobHighlight.outlineWidth);
-        verticalLine(matrix, consumer, minX, minY, maxZ, minX, minY, minZ, r, g, b, a, MobHighlight.outlineWidth);
+        verticalLine(matrix, consumer, minX, minY, minZ, maxX, minY, minZ, r, g, b, a, width);
+        verticalLine(matrix, consumer, maxX, minY, minZ, maxX, minY, maxZ, r, g, b, a, width);
+        verticalLine(matrix, consumer, maxX, minY, maxZ, minX, minY, maxZ, r, g, b, a, width);
+        verticalLine(matrix, consumer, minX, minY, maxZ, minX, minY, minZ, r, g, b, a, width);
 
 
     }
 
-    public static void renderFilledBox(PoseStack matrices,
-                                     VertexConsumer consumer,
-                                     AABB box,
-                                     float[] rgba) {
+    private static void fillBox(Matrix4f matrix, VertexConsumer consumer, AABB box, float[] rgba) {
 
         if (rgba[3] == 0) return;
         float r = rgba[0];
@@ -254,7 +273,6 @@ public class RenderUtils {
         float b = rgba[2];
         float a = rgba[3];
 
-        Matrix4f matrix = matrices.last().pose();
 
         double minX = box.minX;
         double minY = box.minY;

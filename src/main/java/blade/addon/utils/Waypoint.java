@@ -1,8 +1,7 @@
 package blade.addon.utils;
 
 import blade.addon.utils.rendering.RenderUtils;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.minecraft.world.phys.AABB;
 
 public class Waypoint {
@@ -38,8 +37,8 @@ public class Waypoint {
         return throughWall;
     }
 
-    public void Render(VertexConsumer consumer, PoseStack matrixStack) {
-        RenderUtils.renderFilledBox(matrixStack, consumer, new AABB(x, y, z, x + dx, y + dy, z + dz), new float[]{r, g, b,a});
+    public void render(LevelRenderContext context) {
+        RenderUtils.drawFilledBox(context, getBox(), getColor(), true);
     }
 
     public AABB getBox() {

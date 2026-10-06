@@ -4,9 +4,7 @@ import blade.addon.utils.Location;
 import blade.addon.utils.data.EntityUtil;
 import blade.addon.utils.events.Events;
 import blade.addon.utils.rendering.RenderUtils;
-import blade.addon.utils.rendering.RenderingEvents;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import config.practical.manager.ConfigValue;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -157,7 +155,6 @@ public class MobHighlight {
         });
 
         ClientEntityEvents.ENTITY_UNLOAD.register((entity, world) -> {
-            if (entity == null) return;
             int id = entity.getId();
             savedEntities.removeIf(dataHolder -> dataHolder.entity == entity);
             foundEntities.remove(id);
@@ -166,8 +163,8 @@ public class MobHighlight {
             }
         });
 
-        RenderingEvents.FILLED.register(MobHighlight::renderFilled);
-        RenderingEvents.LINE.register(MobHighlight::renderOutline);
+        LevelRenderEvents.COLLECT_SUBMITS.register(MobHighlight::renderFilled);
+        LevelRenderEvents.COLLECT_SUBMITS.register(MobHighlight::renderOutline);
     }
 
     private static void testArmorStand(ArmorStand armorStand) {
@@ -276,11 +273,11 @@ public class MobHighlight {
 
 
     public static boolean renderFilled() {
-        return currentHighlight == HighlightType.BOTH || currentHighlight == HighlightType.FILLED;
+        return currentHighlight != HighlightType.BOTH && currentHighlight != HighlightType.FILLED;
     }
 
     public static boolean renderOutline() {
-        return currentHighlight == HighlightType.BOTH || currentHighlight == HighlightType.OUTLINE;
+        return currentHighlight != HighlightType.BOTH && currentHighlight != HighlightType.OUTLINE;
     }
 
     public static AABB getBox(Entity entity) {
@@ -302,8 +299,8 @@ public class MobHighlight {
     }
 
 
-    private static void renderFilled(LevelRenderContext context, PoseStack matrixStack, VertexConsumer consumer) {
-        if (!MobHighlight.mobHighlight || dontRenderHighlight || !MobHighlight.renderFilled()) return;
+    private static void renderFilled(LevelRenderContext context) {
+        if (!MobHighlight.mobHighlight || dontRenderHighlight || MobHighlight.renderFilled()) return;
 
         for (DataHolder savedEntity : savedEntities) {
             Entity entity = savedEntity.entity;
@@ -315,13 +312,13 @@ public class MobHighlight {
             int filledColor = getFilledColor(type);
             float[] rgba = RenderUtils.toFloats(filledColor);
 
-            RenderUtils.renderFilledBox(matrixStack, consumer,box, rgba);
+            RenderUtils.drawFilledBox(context, box, rgba);
 
         }
     }
 
-    private static void renderOutline(LevelRenderContext context, PoseStack matrixStack, VertexConsumer consumer) {
-        if (!MobHighlight.mobHighlight || dontRenderHighlight || !MobHighlight.renderOutline()) return;
+    private static void renderOutline(LevelRenderContext context) {
+        if (!MobHighlight.mobHighlight || dontRenderHighlight || MobHighlight.renderOutline()) return;
 
         for (DataHolder savedEntity : savedEntities) {
             Entity entity = savedEntity.entity;
@@ -333,7 +330,7 @@ public class MobHighlight {
             int outlineColor = getOutlineColor(type);
             float[] rgba = RenderUtils.toFloats(outlineColor);
 
-            RenderUtils.renderOutlinedBox(matrixStack, consumer,box, rgba);
+            RenderUtils.drawOutlinedBox(context, box, rgba);
         }
     }
 }
