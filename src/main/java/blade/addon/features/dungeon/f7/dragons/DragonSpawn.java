@@ -2,50 +2,33 @@ package blade.addon.features.dungeon.f7.dragons;
 
 import blade.addon.utils.Misc;
 import blade.addon.utils.config.values.Floor7;
-import blade.addon.utils.debug.Debug;
 import blade.addon.utils.events.Events;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
 import net.minecraft.sounds.SoundEvents;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 public class DragonSpawn {
 
-    public enum Team {
-        ARCHER_TEAM("Archer team"), BERS_TEAM("Bers team");
+    public static final int SPAWN_DURATION = 100;
 
-        private final String label;
-
-        Team(String label) {
-            this.label = label;
-        }
-
-        @Override
-        public String toString() {
-            return label;
-        }
-    }
-
-    private static final int SPAWN_DURATION = 100;
-
-    static Dragon currentDragon = Dragon.NONE;
-    static boolean hasDoneSplit = false;
-    private static int tick = 0;
+    private static final ConcurrentLinkedQueue<Dragon> dragons = new ConcurrentLinkedQueue<>();
 
     public static void init() {
         Events.ON_PARTICLE.register(packet -> {
             if (!validParticle(packet)) return false;
             Dragon dragon = Dragon.getDragon(packet.getX(), packet.getY(), packet.getZ());
-            testDragon(dragon);
+            addDragon(dragon);
             return false;
         });
 
         Events.ON_SERVER_TICK.register(() -> {
-            tick = Math.max(tick - 1, 0);
+            dragons.removeIf(dragon -> {
+                dragon.tick--;
+                return dragon.tick <= 0;
+            });
 
-            if (tick == 0 && currentDragon != Dragon.NONE) {
-                currentDragon = Dragon.NONE;
-            }
             return false;
         });
 
@@ -55,24 +38,18 @@ public class DragonSpawn {
         });
     }
 
-    private static void testDragon(Dragon dragon) {
-        if (dragon == Dragon.NONE) return;
+    private static void addDragon(Dragon dragon) {
+        if (dragon == Dragon.NONE || dragons.contains(dragon) || dragon.tick > 0) return;
 
-        if (currentDragon == Dragon.NONE) {
-            Debug.sendDebugMessage(Component.literal("Drag: " + currentDragon.name()));
-            currentDragon = dragon;
-            tick = SPAWN_DURATION;
 
-            if (Floor7.sendSoundOnDragSpawn) {
-                Misc.sendSound(SoundEvents.NOTE_BLOCK_PLING.value(), 0.75f, 1);
-            }
+        dragon.tick = SPAWN_DURATION;
+        dragons.add(dragon);
 
-        } else if (currentDragon != dragon && !hasDoneSplit) {
-            Debug.sendDebugMessage(Component.literal("comparing: " + currentDragon.name() + " and " +  dragon.name()));
-            currentDragon = Dragon.getPrio(dragon, currentDragon);
-            hasDoneSplit = true;
+        if (Floor7.sendSoundOnDragSpawn) {
+            Misc.sendSound(SoundEvents.NOTE_BLOCK_PLING.value(), 0.75f, 1);
         }
     }
+
 
     private static boolean validParticle(ClientboundLevelParticlesPacket packet) {
         if (packet.getCount() != 20) return false;
@@ -87,12 +64,14 @@ public class DragonSpawn {
     }
 
     private static void resetInfo() {
-        hasDoneSplit = false;
-        currentDragon = Dragon.NONE;
-        tick = 0;
+        for (Dragon dragon : Dragon.values()) {
+            dragon.tick = 0;
+        }
     }
 
-    public static int getTick() {
-        return tick;
+    public static Dragon getDragon() {
+        Dragon dragon = dragons.peek();
+        if (dragon == null) return Dragon.NONE;
+        return dragon;
     }
 }

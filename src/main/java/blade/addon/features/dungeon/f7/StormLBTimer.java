@@ -18,7 +18,7 @@ import java.util.List;
 
 public class StormLBTimer extends HUDComponent {
 
-    private static final int BASE_LB_TICK = 20 * 34;
+    private static final int BASE_LB_TICK = 20 * 32;
     private static final int DISPLAY_DURATION_TICK = 20 * 5;
 
     private int tick = 0;

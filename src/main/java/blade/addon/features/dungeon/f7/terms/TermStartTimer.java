@@ -13,7 +13,7 @@ import java.util.List;
 
 public class TermStartTimer extends CombineableTickTimer {
 
-    private static final int TOTAL_TICKS = 100;
+    private static final int TOTAL_TICKS = 20 * 3;
 
     private int tick = TOTAL_TICKS;
 

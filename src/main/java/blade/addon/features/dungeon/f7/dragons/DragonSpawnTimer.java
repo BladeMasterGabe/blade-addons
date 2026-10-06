@@ -33,7 +33,7 @@ public class DragonSpawnTimer extends HUDComponent {
 
     @Override
     public boolean shouldRender() {
-        return Floor7.dragSpawnTimers && DragonSpawn.currentDragon != Dragon.NONE;
+        return Floor7.dragSpawnTimers && DragonSpawn.getDragon() != Dragon.NONE;
     }
 
     @Override
@@ -43,6 +43,7 @@ public class DragonSpawnTimer extends HUDComponent {
 
     @Override
     public void render(@NonNull GuiGraphicsExtractor guiGraphicsExtractor) {
-        RenderUtils.drawTimer(this, guiGraphicsExtractor, DragonSpawn.getTick(), DragonSpawn.currentDragon.color);
+        Dragon dragon = DragonSpawn.getDragon();
+        RenderUtils.drawTimer(this, guiGraphicsExtractor, dragon.tick, dragon.color);
     }
 }
