@@ -25,7 +25,6 @@ public class InvincibilityDisplay extends HUDComponent {
     private static final int TEXT_HEIGHT = 9;
     private static final int SPRITE_SIZE = TEXT_HEIGHT;
 
-
     public InvincibilityDisplay() {
         super("Invincibility timer");
     }

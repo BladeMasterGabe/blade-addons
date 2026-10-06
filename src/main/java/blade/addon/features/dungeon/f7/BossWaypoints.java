@@ -8,13 +8,11 @@ import blade.addon.utils.config.values.Floor7;
 import blade.addon.utils.data.EntityUtil;
 import blade.addon.utils.dungeon.Phase;
 import blade.addon.utils.rendering.RenderUtils;
-import blade.addon.utils.rendering.RenderingEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.core.BlockPos;
@@ -46,16 +44,16 @@ public class BossWaypoints {
 
     public static void init() {
         load();
-        RenderingEvents.FILLED.register(BossWaypoints::render);
-        RenderingEvents.FILLED_NO_DEPTH.register(BossWaypoints::renderThroughWall);
+        LevelRenderEvents.COLLECT_SUBMITS.register(BossWaypoints::render);
+        LevelRenderEvents.COLLECT_SUBMITS.register(BossWaypoints::renderThroughWall);
         UseBlockCallback.EVENT.register(BossWaypoints::onBlock);
     }
 
     public static boolean isInValidArea() {
-        if (!Floor7.enableBossWaypoints) return false;
-        if (ignoreBoss) return true;
+        if (!Floor7.enableBossWaypoints) return true;
+        if (ignoreBoss) return false;
 
-        return Location.inDungeon() && Phase.inBoss();
+        return !Location.inDungeon() || !Phase.inBoss();
     }
 
     public static boolean getPlace() {
@@ -119,7 +117,7 @@ public class BossWaypoints {
     }
 
     private static InteractionResult onBlock(Player playerEntity, Level world, InteractionHand hand, BlockHitResult blockHitResult) {
-        if (!isInValidArea() || !EntityUtil.isClientPlayer(playerEntity)) return InteractionResult.PASS;
+        if (isInValidArea() || !EntityUtil.isClientPlayer(playerEntity)) return InteractionResult.PASS;
         if (hand == InteractionHand.OFF_HAND) return InteractionResult.PASS;
 
         BlockPos pos = blockHitResult.getBlockPos();
@@ -141,18 +139,18 @@ public class BossWaypoints {
         return InteractionResult.PASS;
     }
 
-    private static void renderThroughWall(LevelRenderContext context, PoseStack matrixStack, VertexConsumer consumer) {
-        if (!isInValidArea()) return;
+    private static void renderThroughWall(LevelRenderContext context) {
+        if (isInValidArea()) return;
 
         waypoints.forEach(waypoint -> {
             if (waypoint.isThroughWall()) {
-                waypoint.Render(consumer, matrixStack);
+                waypoint.render(context);
             }
         });
     }
 
-    private static void render(LevelRenderContext context, PoseStack matrixStack, VertexConsumer consumer) {
-        if (!isInValidArea()) return;
+    private static void render(LevelRenderContext context) {
+        if (isInValidArea()) return;
 
         waypoints.forEach(waypoint -> {
             if (!waypoint.isThroughWall()) {

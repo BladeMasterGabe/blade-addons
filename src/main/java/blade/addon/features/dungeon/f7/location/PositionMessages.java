@@ -5,9 +5,7 @@ import blade.addon.utils.config.values.Floor7;
 import blade.addon.utils.debug.Debug;
 import blade.addon.utils.dungeon.Phase;
 import blade.addon.utils.events.Events;
-import blade.addon.utils.rendering.RenderingEvents;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.minecraft.client.Minecraft;
@@ -36,7 +34,7 @@ public class PositionMessages {
 
     public static void init() {
         ClientTickEvents.END_CLIENT_TICK.register(PositionMessages::tick);
-        RenderingEvents.LINE.register(PositionMessages::render);
+        LevelRenderEvents.COLLECT_SUBMITS.register(PositionMessages::render);
         Events.ON_LOCATION_CHANGE.register(newLocation -> {
             disableAll();
             return false;
@@ -98,7 +96,7 @@ public class PositionMessages {
         }
     }
 
-    private static void render(LevelRenderContext context, PoseStack matrixStack, VertexConsumer consumer) {
+    private static void render(LevelRenderContext context) {
         if (!Location.inDungeon() || !Debug.renderPositions) return;
 
         for (PositionMessage positionMessage : positionMessages) {

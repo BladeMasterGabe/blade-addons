@@ -6,10 +6,8 @@ import blade.addon.utils.Misc;
 import blade.addon.utils.config.values.ExtraOptions;
 import blade.addon.utils.events.Events;
 import blade.addon.utils.rendering.RenderUtils;
-import blade.addon.utils.rendering.RenderingEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import blade.addon.utils.times.PersonalBests;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.minecraft.client.Minecraft;
@@ -115,7 +113,7 @@ public class PracticeSS {
             }
         });
 
-        RenderingEvents.FILLED.register(PracticeSS::render);
+        LevelRenderEvents.COLLECT_SUBMITS.register(PracticeSS::render);
         Events.ON_LOCATION_CHANGE.register(_ -> {
             reset();
             return false;
@@ -350,7 +348,7 @@ public class PracticeSS {
         return endIndex - ticksLeft / getDelay();
     }
 
-    private static void render(LevelRenderContext context, PoseStack matrixStack, VertexConsumer consumer) {
+    private static void render(LevelRenderContext context) {
         if (!started) return;
 
         if (showingPattern) {

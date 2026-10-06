@@ -40,7 +40,6 @@ import blade.addon.utils.dungeon.DungeonClass;
 import blade.addon.utils.dungeon.Phase;
 import blade.addon.utils.dungeon.Section;
 import blade.addon.utils.events.CustomEvents;
-import blade.addon.utils.rendering.RenderingEvents;
 import net.fabricmc.api.ModInitializer;
 
 public class Bladeaddons implements ModInitializer {
@@ -52,7 +51,7 @@ public class Bladeaddons implements ModInitializer {
         Buttons.init();
         try {
             Config.manager.load();
-        }catch (NullPointerException err) {}
+        } catch (NullPointerException _) {}
         Keybinds.init();
         CustomEvents.init();
         Commands.init();
@@ -64,8 +63,6 @@ public class Bladeaddons implements ModInitializer {
 
         PartyUtil.init();
         EntityUtil.init();
-
-        RenderingEvents.init();
 
         StormTime.init();
         PositionMessages.init();

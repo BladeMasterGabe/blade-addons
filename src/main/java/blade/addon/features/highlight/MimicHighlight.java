@@ -3,9 +3,7 @@ package blade.addon.features.highlight;
 import blade.addon.utils.Location;
 import blade.addon.utils.events.Events;
 import blade.addon.utils.rendering.RenderUtils;
-import blade.addon.utils.rendering.RenderingEvents;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -37,22 +35,22 @@ public class MimicHighlight {
 
        ClientTickEvents.END_CLIENT_TICK.register(client -> mimics.removeIf(BlockEntity::isRemoved));
 
-        RenderingEvents.FILLED.register(MimicHighlight::renderFilled);
-        RenderingEvents.LINE.register(MimicHighlight::renderOutline);
+        LevelRenderEvents.COLLECT_SUBMITS.register(MimicHighlight::renderFilled);
+        LevelRenderEvents.COLLECT_SUBMITS.register(MimicHighlight::renderOutline);
     }
 
 
-    private static void renderFilled(LevelRenderContext context, PoseStack matrixStack, VertexConsumer consumer) {
-        if (!MobHighlight.highlightMimicChests || !MobHighlight.renderFilled()) return;
+    private static void renderFilled(LevelRenderContext context) {
+        if (!MobHighlight.highlightMimicChests || MobHighlight.renderFilled()) return;
 
         float[] rgba = RenderUtils.toFloats(MobHighlight.mimicFilledColor);
-        mimics.forEach(mimic -> RenderUtils.renderFilledBox(matrixStack, consumer, box.move(mimic.getBlockPos()), rgba));
+        mimics.forEach(mimic -> RenderUtils.drawFilledBox(context, box.move(mimic.getBlockPos()), rgba));
     }
 
-    private static void renderOutline(LevelRenderContext context, PoseStack matrixStack, VertexConsumer consumer) {
-        if (!MobHighlight.highlightMimicChests || !MobHighlight.renderOutline()) return;
+    private static void renderOutline(LevelRenderContext context) {
+        if (!MobHighlight.highlightMimicChests || MobHighlight.renderOutline()) return;
 
         float[] rgba = RenderUtils.toFloats(MobHighlight.mimicOutlineColor);
-        mimics.forEach(mimic -> RenderUtils.renderOutlinedBox(matrixStack, consumer,box.move(mimic.getBlockPos()), rgba));
+        mimics.forEach(mimic -> RenderUtils.drawOutlinedBox(context, box.move(mimic.getBlockPos()), rgba));
     }
 }
