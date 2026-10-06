@@ -22,7 +22,7 @@ public class NotificationEditScreen extends Screen {
         super(Component.empty());
 
         Minecraft client = Minecraft.getInstance();
-        parent = client.screen;
+        parent = client.gui.screen();
         Window window = client.getWindow();
         scroll = new ConfigScroll(0,  30, window.getGuiScaledWidth(), window.getGuiScaledHeight(), Constants.WIDGET_WIDTH);
         this.notification = notification;
@@ -51,6 +51,6 @@ public class NotificationEditScreen extends Screen {
     @Override
     public void onClose() {
         assert this.minecraft != null;
-        this.minecraft.setScreen(this.parent);
+        this.minecraft.setScreenAndShow(this.parent);
     }
 }

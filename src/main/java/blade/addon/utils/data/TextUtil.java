@@ -1,7 +1,6 @@
 package blade.addon.utils.data;
 
 import blade.addon.utils.Constants;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.FormattedCharSequence;
@@ -62,11 +61,12 @@ public class TextUtil {
         if (style == null) return;
 
         TextColor color = style.getColor();
+        /*
         if (color != null && color.getValue() != tracker.currentColor) {
             builder.append('§');
             builder.append(getFormatChar(color.getValue()));
             tracker.currentColor = color.getValue();
-        }
+        } */
 
         if (style.isObfuscated() &&  !tracker.isObfuscated) {
             builder.append("§k");
@@ -104,6 +104,7 @@ public class TextUtil {
         }
     }
 
+    /*
     private static char getFormatChar(int color) {
         for (ChatFormatting format: ChatFormatting.values()) {
             Integer colorValue = format.getColor();
@@ -115,7 +116,7 @@ public class TextUtil {
         }
 
         return '0';
-    }
+    } */
 
     public static String formatTicks(int tick) {
        return Constants.DECIMAL_FORMAT.format(tick * Constants.TICK_DURATION);

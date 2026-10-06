@@ -85,7 +85,7 @@ public class Keybinds {
     public static void checkInputs(Minecraft client) {
 
         if (openConfig.consumeClick()) {
-            client.setScreen(Config.createScreen(null));
+            client.setScreenAndShow(Config.createScreen(null));
         }
 
         if (trades.consumeClick()) {

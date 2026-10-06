@@ -1,6 +1,7 @@
 package blade.addon.features.filter;
 
 import blade.addon.features.notifications.Notifications;
+import blade.addon.utils.Tuple;
 import com.mojang.blaze3d.platform.Window;
 import config.practical.ConfigScroll;
 import config.practical.utilities.Constants;
@@ -9,7 +10,6 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Tuple;
 import org.joml.Matrix3x2fStack;
 import org.jspecify.annotations.NonNull;
 
@@ -33,11 +33,11 @@ public class FilterList extends Screen {
         super(Component.literal("Filter"));
 
         Minecraft client = Minecraft.getInstance();
-        parent = client.screen;
+        parent = client.gui.screen();
         Window window = client.getWindow();
 
         Tuple<Integer, Integer> pos = getButtonPos();
-        addFilter = Button.builder(Component.literal("Add Filter"), this::addFilter).pos(pos.getA(), pos.getB()).width(BUTTON_WIDTH).build();
+        addFilter = Button.builder(Component.literal("Add Filter"), this::addFilter).pos(pos.a, pos.b).width(BUTTON_WIDTH).build();
         scroll = new ConfigScroll(0, BUTTON_HEIGHT + TITLE_Y_OFFSET + 16, window.getGuiScaledWidth(), window.getGuiScaledHeight() - BUTTON_HEIGHT, Constants.WIDGET_WIDTH);
     }
 
@@ -54,7 +54,7 @@ public class FilterList extends Screen {
         stack.popMatrix();
 
         Tuple<Integer, Integer> pos = getButtonPos();
-        graphics.textWithWordWrap(  this.font, INFO_TEXT, pos.getA() + BUTTON_WIDTH + 5, pos.getB(), 245, 0xffffffff, true);
+        graphics.textWithWordWrap(  this.font, INFO_TEXT, pos.a + BUTTON_WIDTH + 5, pos.b, 245, 0xffffffff, true);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class FilterList extends Screen {
     public void onClose() {
         assert this.minecraft != null;
         Notifications.save();
-        this.minecraft.setScreen(this.parent);
+        this.minecraft.setScreenAndShow(this.parent);
         Filters.filterManager.save();
     }
 

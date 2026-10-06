@@ -32,7 +32,7 @@ public class Scheduler {
             if (scheduledScreen != null) {
                 screenTicks--;
                 if (screenTicks <= 0) {
-                    minecraftClient.setScreen(scheduledScreen);
+                    minecraftClient.setScreenAndShow(scheduledScreen);
                     scheduledScreen = null;
                 }
             }

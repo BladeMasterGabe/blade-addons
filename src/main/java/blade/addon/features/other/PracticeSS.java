@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Collections;
 import java.util.List;
@@ -387,7 +388,7 @@ public class PracticeSS {
 
     private static void renderBackground(int backgroundIndex) {
         if (buttons.size() > backgroundIndex && backgroundIndex >= 0) {
-            AABB box = AABB.ofSize(buttons.get(backgroundIndex).getCenter(), 1, 1, 1);
+            AABB box = AABB.ofSize(Vec3.atLowerCornerOf(buttons.get(backgroundIndex)), 1, 1, 1);
             int dx, dz;
             switch (direction) {
                 case SOUTH -> {

@@ -28,7 +28,7 @@ public class NotificationList extends Screen {
         super(Component.literal("Notifications"));
 
         Minecraft client = Minecraft.getInstance();
-        parent = client.screen;
+        parent = client.gui.screen();
         Window window = client.getWindow();
 
         scroll = new ConfigScroll(0,  BUTTON_HEIGHT + TITLE_Y_OFFSET + 16, window.getGuiScaledWidth(), window.getGuiScaledHeight() - BUTTON_HEIGHT, Constants.WIDGET_WIDTH);
@@ -59,7 +59,7 @@ public class NotificationList extends Screen {
     @Override
     public void onClose() {
         Notifications.save();
-        this.minecraft.setScreen(this.parent);
+        this.minecraft.setScreenAndShow(this.parent);
     }
 
     private void updateList() {

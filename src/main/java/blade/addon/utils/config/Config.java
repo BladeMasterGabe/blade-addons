@@ -52,13 +52,13 @@ public class Config {
         general.add(new ConfigString(Component.literal("Message prefix"), () -> ExtraOptions.textPrefix, str -> ExtraOptions.textPrefix = str));
 
         ConfigSection notifications = new ConfigSection(Component.literal("Chat Notifications"));
-        notifications.add(new ConfigButton(Component.literal("Edit Notifications"), () -> Minecraft.getInstance().setScreen(new NotificationList())));
+        notifications.add(new ConfigButton(Component.literal("Edit Notifications"), () -> Minecraft.getInstance().setScreenAndShow(new NotificationList())));
         notifications.add(new ConfigBool(Component.literal("Ignore color codes"), () -> ExtraOptions.ignoreColorCodesNotification, bool -> ExtraOptions.ignoreColorCodesNotification = bool));
         general.add(notifications);
 
 
         ConfigSection chatFilter = new ConfigSection(Component.literal("Chat filter"));
-        chatFilter.add(new ConfigButton(Component.literal("Edit"), () -> Minecraft.getInstance().setScreen(new FilterList())));
+        chatFilter.add(new ConfigButton(Component.literal("Edit"), () -> Minecraft.getInstance().setScreenAndShow(new FilterList())));
         chatFilter.add(new ConfigBool(Component.literal("Ignore color codes"), () -> ExtraOptions.ignoreColorCodesFilter, bool -> ExtraOptions.ignoreColorCodesFilter = bool));
         chatFilter.add(new ConfigBool(Component.literal("Disable all filters"), () -> ExtraOptions.disableAllFilters, bool -> ExtraOptions.disableAllFilters = bool));
         general.add(chatFilter);

@@ -1,9 +1,8 @@
 package blade.addon.utils.rendering;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.world.phys.Vec3;
@@ -42,11 +41,18 @@ public class RenderHandler {
         matrices.pushPose();
         matrices.translate(-camera.x, -camera.y, -camera.z);
 
-        MultiBufferSource consumers = context.bufferSource();
-        if (consumers == null) return;
-        VertexConsumer consumer = consumers.getBuffer(renderType);
+        SubmitNodeCollector collector = context.submitNodeCollector();
 
-        invoke(renderingEvent -> renderingEvent.render(context, matrices, consumer));
+        collector.submitCustomGeometry(
+                matrices,
+                renderType,
+                (pose, vertexConsumer) -> {
+                    invoke(renderingEvent ->
+                            renderingEvent.render(context, matrices, vertexConsumer)
+                    );
+                }
+        );
+
         matrices.popPose();
     }
 

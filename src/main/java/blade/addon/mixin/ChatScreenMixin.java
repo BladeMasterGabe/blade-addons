@@ -28,7 +28,7 @@ public class ChatScreenMixin {
         if (!ExtraOptions.copyChat || click.button() != GLFW.GLFW_MOUSE_BUTTON_RIGHT) return;
 
         Minecraft mc = Minecraft.getInstance();
-        ChatComponent chatHud = mc.gui.getChat();
+        ChatComponent chatHud = mc.gui.hud.getChat();
         ChatComponentMixin hudAccessor = (ChatComponentMixin) chatHud;
         if (chatHud == null) return;
 

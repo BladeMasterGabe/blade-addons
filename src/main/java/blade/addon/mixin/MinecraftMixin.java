@@ -44,7 +44,7 @@ public class MinecraftMixin {
         Events.ON_WORLD_CHANGE.invoke(WorldEvent::onWorldSwap);
     }
 
-    @Inject(method = "setScreen", at=@At("HEAD"))
+    @Inject(method = "setScreenAndShow", at=@At("HEAD"))
     public void onClose(Screen screen, CallbackInfo ci) {
         if (screen == null) Events.ON_SCREEN.invoke(screenEvent -> screenEvent.onScreen(null));
     }
