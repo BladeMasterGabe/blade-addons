@@ -386,7 +386,7 @@ public class PracticeSS {
 
     private static void renderBackground(int backgroundIndex) {
         if (buttons.size() > backgroundIndex && backgroundIndex >= 0) {
-            AABB box = AABB.ofSize(Vec3.atLowerCornerOf(buttons.get(backgroundIndex)), 1, 1, 1);
+            AABB box = AABB.ofSize(Vec3.atCenterOf(buttons.get(backgroundIndex)), 1, 1, 1);
             int dx, dz;
             switch (direction) {
                 case SOUTH -> {
