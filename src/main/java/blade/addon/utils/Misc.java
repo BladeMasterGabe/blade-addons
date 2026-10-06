@@ -56,7 +56,7 @@ public class Misc {
     }
 
     public static void forceTitle(Component title, Component subtitle) {
-        GameHud gameHud = (GameHud) INSTANCE.gui;
+        GameHud gameHud = (GameHud) INSTANCE.gui.hud;
         forceMainThread(() -> gameHud.blade_addons$forceTitle(title, subtitle));
     }
 
