@@ -63,7 +63,7 @@ public class RelicSpawn {
     public static void init() {
         Events.ON_SERVER_TICK.register(() -> {
 
-            if (!Location.inDungeon() || !Phase.inP5()) return false;
+            if (!Location.inDungeon()) return false;
 
             tick = Math.max(tick - 1, -1);
 
@@ -91,7 +91,7 @@ public class RelicSpawn {
         });
 
         Events.ON_GAME_MESSAGE.register(message -> {
-            if (!Location.inDungeon() || !Phase.inP5()) return false;
+            if (!Location.inDungeon()) return false;
             String str = message.getString().replaceAll("§.", "");
             Matcher matcher = PATTERN.matcher(str);
             if (matcher.find()) {
@@ -108,7 +108,7 @@ public class RelicSpawn {
         });
 
         ClientTickEvents.END_LEVEL_TICK.register(world -> {
-            if (!Location.inDungeon() || !Phase.inP5() || !Floor7.showAllRelicTimes || sentRelicTimes) return;
+            if (!Location.inDungeon() || !Floor7.showAllRelicTimes || sentRelicTimes) return;
 
             Iterable<Entity> entities = world.entitiesForRendering();
 
@@ -147,7 +147,7 @@ public class RelicSpawn {
     }
 
     private static boolean blockInteraction(BlockHitResult result, ItemStack itemStack) {
-        if ((!Location.inDungeon() || !Phase.inP5())) return false;
+        if ((!Location.inDungeon())) return false;
 
         if (pickedupRelic == null) return false;
 
