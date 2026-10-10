@@ -23,12 +23,10 @@ import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
 public class Keybinds {
-
     private static KeyMapping openConfig;
     private static KeyMapping trades;
     private static KeyMapping potions;
@@ -38,52 +36,50 @@ public class Keybinds {
     private static KeyMapping getBlockInfo;
 
     public static void init() {
-
         KeyMapping.Category category = KeyMapping.Category.register(Identifier.parse(Constants.NAMESPACE));
 
         //normal keybinds
         openConfig = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "opens Config",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_RIGHT_SHIFT,
+                InputConstants.Type.KEYBOARD,
+                InputConstants.KEY_RSHIFT,
                 category));
 
         trades = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "Opens the trades menu",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.Type.KEYBOARD,
+                0,
                 category));
 
         potions = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "Opens the potion bag",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.Type.KEYBOARD,
+                0,
                 category));
 
         //debug keybinds
         getItemLore = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "Grabs the items lore",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.Type.KEYBOARD,
+                0,
                 category));
 
         getItemCustomData = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "Grabs the items custom data",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.Type.KEYBOARD,
+                0,
                 category));
 
         getBlockInfo = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "Grabs the blocks data",
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
+                InputConstants.Type.KEYBOARD,
+                0,
                 category));
 
         ClientTickEvents.END_CLIENT_TICK.register(Keybinds::checkInputs);
     }
 
     public static void checkInputs(Minecraft client) {
-
         if (openConfig.consumeClick()) {
             client.setScreenAndShow(Config.createScreen(null));
         }
@@ -132,7 +128,6 @@ public class Keybinds {
             }
 
             Misc.addChatMessage(Component.literal(nbt.toString()));
-
         }
 
         if (getBlockInfo.consumeClick()) {
@@ -151,7 +146,7 @@ public class Keybinds {
                 Misc.addChatMessage(Component.literal("Pos: " + pos));
                 if (state.hasBlockEntity()) {
                     BlockEntity entity = world.getBlockEntity(pos);
-                    Misc.addChatMessage(Component.literal(entity.toString()));
+                    Misc.addChatMessage(Component.literal(String.valueOf(entity)));
 
                     if (entity instanceof SkullBlockEntity skullEntity) {
                         ResolvableProfile component = skullEntity.getOwnerProfile();

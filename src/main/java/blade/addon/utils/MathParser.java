@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
  * so I actually felt like documenting it.
  */
 public class MathParser {
-
     private static final Pattern NUMBER_PATTERN = Pattern.compile("^(?<num>-?\\d+)(?<decimal>\\.\\d+)?(?<unit>[bBmMkK])?");
     private static final Pattern TOKEN_PATTERN = Pattern.compile("[()+\\-*/^]");
 
@@ -82,7 +81,6 @@ public class MathParser {
             value = Double.parseDouble(num);
         }
 
-
         if (unit != null) {
             switch (unit) {
                 case "b", "B":
@@ -99,7 +97,6 @@ public class MathParser {
 
         return value;
     }
-
 
     /**
      * Parses an RPN token, Will throw an {@code IllegalArgumentException} when handling an invalid token.
@@ -125,7 +122,6 @@ public class MathParser {
 
             throw new IllegalArgumentException("Invalid token");
         }
-
 
         double right = stack.pop();
         double left = stack.pop();
@@ -211,7 +207,6 @@ public class MathParser {
             }
             stack.push(token);
             return true;
-
         } else if (token.equals("(")) {
             stack.push(token);
             return true;
@@ -266,7 +261,7 @@ public class MathParser {
      */
     private static ArrayList<String> toTokens(String string) {
         ArrayList<String> output = new ArrayList<>();
-        String copiedString = string.replaceAll(" ", "");
+        String copiedString = string.replace(" ", "");
 
         //to handle binary subtraction not getting confused
         //with unary subtraction
@@ -303,5 +298,4 @@ public class MathParser {
 
         return output;
     }
-
 }

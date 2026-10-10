@@ -64,7 +64,6 @@ public class ToolTip {
         if (!nbt.getStringOr("id", "").equals("PET")) return;
 
         String petInfo = nbt.getStringOr("petInfo", null);
-        if (petInfo == null) return;
 
         Matcher matcher = PATTERN.matcher(petInfo);
         if (!matcher.find()) return;

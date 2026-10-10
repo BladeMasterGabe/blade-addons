@@ -9,14 +9,12 @@ import java.util.Map;
 import java.util.UUID;
 
 public class PartyUtil {
-
     private static final int MIN_DELAY = 1000 * 60;
     private static final HypixelModAPI INSTANCE = HypixelModAPI.getInstance();
 
     private static long grabbedTime = 0;
     private static Map<UUID, ClientboundPartyInfoPacket.PartyMember> memberMap;
     private static boolean inParty;
-
 
     public static void init() {
         INSTANCE.createHandler(ClientboundPartyInfoPacket.class, packet -> {
@@ -44,10 +42,4 @@ public class PartyUtil {
         if (!inParty) return 0;
         return memberMap.size();
     }
-
-    public static boolean isInParty() {
-        sendPacket();
-        return inParty;
-    }
-
 }

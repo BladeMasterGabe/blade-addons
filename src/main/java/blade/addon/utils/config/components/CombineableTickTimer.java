@@ -10,8 +10,6 @@ import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.NonNull;
 
 public abstract class CombineableTickTimer extends HUDComponent {
-
-
     public CombineableTickTimer(String info) {
         super(info);
     }

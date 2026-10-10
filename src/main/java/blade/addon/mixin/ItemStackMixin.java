@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(ItemStack.class)
 public class ItemStackMixin implements ItemRarityHolder, PetHolder, StarCountHolder, ProtectedItemHolder, MaskHolder {
-
     @Unique
     private ItemRarity itemRarity = null;
 

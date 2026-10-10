@@ -34,8 +34,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPacketListener.class)
 public class ClientPacketListenerMixin {
-
-
     @Shadow
     private ClientLevel level;
 
@@ -45,19 +43,19 @@ public class ClientPacketListenerMixin {
     }
 
     @Inject(method = "handleSetEntityData", at = @At("TAIL"))
-    private void onTracking(ClientboundSetEntityDataPacket packet, CallbackInfo ci, @Local Entity entity) {
+    private void onTracking(ClientboundSetEntityDataPacket packet, CallbackInfo ci, @Local(name = "entity") Entity entity) {
         if (entity == null) return;
 
         Events.ON_ENTITY_TRACKED.invoke(entityTrackEvent -> entityTrackEvent.onEntity(entity, level));
     }
 
     @Inject(method = "applyPlayerInfoUpdate", at = @At(value = "TAIL"))
-    private void onPlayerList(ClientboundPlayerInfoUpdatePacket.Action action, ClientboundPlayerInfoUpdatePacket.Entry receivedEntry, PlayerInfo currentEntry, CallbackInfo ci) {
-        Events.ON_PLAYER_ENTRY.invoke(playerListEvent -> playerListEvent.onNewPlayerEntry(receivedEntry));
+    private void onPlayerList(ClientboundPlayerInfoUpdatePacket.Action action, ClientboundPlayerInfoUpdatePacket.Entry entry, PlayerInfo info, CallbackInfo ci) {
+        Events.ON_PLAYER_ENTRY.invoke(playerListEvent -> playerListEvent.onNewPlayerEntry(entry));
     }
 
     @Inject(method = "handleSetPlayerTeamPacket", at = @At(value = "TAIL"))
-    private void onTeam(ClientboundSetPlayerTeamPacket packet, CallbackInfo ci, @Local PlayerTeam team) {
+    private void onTeam(ClientboundSetPlayerTeamPacket packet, CallbackInfo ci, @Local(name = "team") PlayerTeam team) {
         if (team == null) return;
         String teamStr = (team.getPlayerPrefix().getString() + team.getPlayerSuffix().getString()).replaceAll("§.", "");
         Events.ON_TEAM.invoke(scoreBoardEvent -> scoreBoardEvent.onTeam(teamStr));
@@ -98,7 +96,7 @@ public class ClientPacketListenerMixin {
     }
 
     @Inject(method = "handleAddEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientPacketListener;postAddEntitySoundInstance(Lnet/minecraft/world/entity/Entity;)V"))
-    private void onEntitySpawn(ClientboundAddEntityPacket packet, CallbackInfo ci, @Local Entity entity) {
+    private void onEntitySpawn(ClientboundAddEntityPacket packet, CallbackInfo ci, @Local(name = "entity") Entity entity) {
         Events.ON_ENTITY_SPAWNED.invoke(entityTrackEvent -> entityTrackEvent.onEntity(entity, level));
     }
 

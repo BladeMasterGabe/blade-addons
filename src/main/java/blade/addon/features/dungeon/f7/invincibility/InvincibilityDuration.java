@@ -65,5 +65,4 @@ public class InvincibilityDuration extends HUDComponent {
         ticks = MAX_DURATION;
         Misc.sendSound(Dungeons.invincibilitySound);
     }
-
 }

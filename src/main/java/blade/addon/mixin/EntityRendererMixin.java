@@ -17,15 +17,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> {
-
     @Inject(method = "extractRenderState", at = @At("TAIL"))
-    public void hideFire(T entity, S state, float tickProgress, CallbackInfo ci) {
-
+    public void hideFire(T entity, S state, float partialTicks, CallbackInfo ci) {
         if (Dungeons.hideBlazeNameTag && state.nameTag != null && Location.inDungeon()) {
             if (state.nameTag.getString().contains("Blaze")) {
                 state.nameTag = null;
             }
-
         }
         if (entity instanceof RemotePlayer player && Dungeons.renderClassName && Location.inDungeon()) {
             if (DungeonClass.isTeammate(player)) {

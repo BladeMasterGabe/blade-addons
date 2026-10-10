@@ -25,7 +25,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Hud.class)
 public class HudMixin implements GameHud {
-
     @Shadow
     private Component title;
     @Shadow
@@ -54,19 +53,18 @@ public class HudMixin implements GameHud {
         else if (DeviceNotifier.disableTitles(subtitle)) ci.cancel();
     }
 
-
     @Inject(method = "extractSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;item(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;III)V"), order = 2000)
-    public void drawBackground(GuiGraphicsExtractor context, int x, int y, DeltaTracker tickCounter, Player player, ItemStack stack, int seed, CallbackInfo ci) {
-        DrawEvents.HUD_SLOT_BEFORE.invoke(slotEvent -> slotEvent.draw(context, stack, x, y));
+    public void drawBackground(GuiGraphicsExtractor graphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack itemStack, int seed, CallbackInfo ci) {
+        DrawEvents.HUD_SLOT_BEFORE.invoke(slotEvent -> slotEvent.draw(graphics, itemStack, x, y));
     }
 
     @Inject(method = "extractSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;item(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;III)V", shift = At.Shift.AFTER), order = 2000)
-    public void drawStar(GuiGraphicsExtractor context, int x, int y, DeltaTracker tickCounter, Player player, ItemStack stack, int seed, CallbackInfo ci) {
-        DrawEvents.HUD_SLOT_AFTER.invoke(slotEvent -> slotEvent.draw(context, stack, x, y));
+    public void drawStar(GuiGraphicsExtractor graphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack itemStack, int seed, CallbackInfo ci) {
+        DrawEvents.HUD_SLOT_AFTER.invoke(slotEvent -> slotEvent.draw(graphics, itemStack, x, y));
     }
 
     @Inject(method = "extractEffects", at = @At("HEAD"), cancellable = true, order = 2000)
-    public void renderStatusEffectsOverLay(GuiGraphicsExtractor context, DeltaTracker tickCounter, CallbackInfo ci) {
+    public void renderStatusEffectsOverLay(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (Visual.hideStatusOverLay) {
             ci.cancel();
         }
@@ -79,11 +77,11 @@ public class HudMixin implements GameHud {
     }
 
     @Inject(method = "extractSelectedItemName", at= @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;textWithBackdrop(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIII)V"), cancellable = true)
-    private void renderHeldItemTooltip(GuiGraphicsExtractor graphics, CallbackInfo ci, @Local(name = "str") MutableComponent mutableText, @Local(name = "alpha") int color) {
+    private void renderHeldItemTooltip(GuiGraphicsExtractor graphics, CallbackInfo ci, @Local(name = "str") MutableComponent str, @Local(name = "alpha") int alpha) {
         if (!ExtraOptions.moveToolTip) return;
         ci.cancel();
-        Components.toolTipDisplay.setText(mutableText);
-        Components.toolTipDisplay.setColor(color);
+        Components.toolTipDisplay.setText(str);
+        Components.toolTipDisplay.setColor(alpha);
         Profiler.get().pop();
     }
 
@@ -93,5 +91,4 @@ public class HudMixin implements GameHud {
         this.subtitle = subtitle;
         this.titleTime = this.titleFadeInTime + this.titleStayTime + this.titleFadeOutTime;
     }
-
 }

@@ -8,7 +8,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class PositionMessage {
-
     private final String message;
     private final String[] checks;
     private final AABB box;

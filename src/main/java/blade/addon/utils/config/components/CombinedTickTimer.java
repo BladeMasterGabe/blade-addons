@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CombinedTickTimer extends HUDComponent {
-
     private final CombineableTickTimer[] timers;
 
     public CombinedTickTimer(CombineableTickTimer... timers) {
@@ -73,6 +72,5 @@ public class CombinedTickTimer extends HUDComponent {
     @Override
     public void renderEditTemplate(@NonNull GuiGraphicsExtractor graphics) {
         RenderUtils.drawCenteredText(graphics, Minecraft.getInstance().font, Component.literal(Constants.DECIMAL_FORMAT.format(0.0)), getScaledX(), getScaledY(), 30, 0xffffffff);
-
     }
 }

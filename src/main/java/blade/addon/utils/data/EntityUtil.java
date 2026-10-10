@@ -18,7 +18,6 @@ import net.minecraft.world.phys.Vec3;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class EntityUtil {
-
     private static final ConcurrentHashMap<Player, Boolean> playerMap = new ConcurrentHashMap<>();
 
     public static void init() {
@@ -27,12 +26,12 @@ public class EntityUtil {
             return false;
         });
 
-        Events.ON_LOCATION_CHANGE.register(newLocation -> {
+        Events.ON_LOCATION_CHANGE.register(_ -> {
             playerMap.clear();
             return false;
         });
 
-        ClientEntityEvents.ENTITY_UNLOAD.register((entity, world) -> {
+        ClientEntityEvents.ENTITY_UNLOAD.register((entity, _) -> {
            if (entity instanceof Player) {
                playerMap.remove(entity);
            }
@@ -82,12 +81,6 @@ public class EntityUtil {
         }
 
         return false;
-    }
-
-    public static boolean isWearing(LivingEntity entity, EquipmentSlot slot, String name) {
-        if (entity == null || slot == null || name == null) return false;
-        ItemStack equippedStack = entity.getItemBySlot(slot);
-        return equippedStack.getHoverName().getString().contains(name);
     }
 
     public static AABB getBox(Entity entity) {

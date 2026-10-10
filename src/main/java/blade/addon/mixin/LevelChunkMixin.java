@@ -10,11 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelChunk.class)
 public abstract class LevelChunkMixin {
-
     @Inject(method = "setBlockEntity", at=@At("HEAD"))
     public void onBlockEntity(BlockEntity blockEntity, CallbackInfo ci) {
         Events.ON_BLOCK_ENTITY.invoke(blockEntityEvent -> blockEntityEvent.on(blockEntity));
-
     }
-
 }

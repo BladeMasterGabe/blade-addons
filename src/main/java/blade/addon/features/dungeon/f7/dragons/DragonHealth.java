@@ -11,7 +11,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -30,13 +29,9 @@ public class DragonHealth {
     static final ConcurrentLinkedQueue<DataHolder> dragons = new ConcurrentLinkedQueue<>();
 
     public static void init() {
-
         Events.ON_ENTITY_SPAWNED.register((entity, _) -> {
             if (!Location.inDungeon()) return false;
-
-            if (entity instanceof EnderDragon dragon) {
-                dragons.add(new DataHolder(dragon, dragon.getHealth()));
-            }
+            if (entity instanceof EnderDragon dragon) dragons.add(new DataHolder(dragon, dragon.getHealth()));
 
             return false;
         });
@@ -64,20 +59,14 @@ public class DragonHealth {
         if (!Floor7.dragonHealth) return;
 
         dragons.forEach(dataHolder -> {
-
             EnderDragon dragon = dataHolder.dragon;
             float currHealth =  dragon.getHealth();
 
-            if (currHealth != 1024.0f) {
-                dataHolder.health = currHealth;
-            }
-
+            if (currHealth != 1024.0f) dataHolder.health = currHealth;
             float health = dataHolder.health;
 
             if (health == 0) return;
-            Vec3 pos = EntityUtil.getLerpedPos(dragon);
-            RenderUtils.renderText(context, Component.literal(RenderUtils.formatNumber(health)).withColor(getColor(health)), pos, 5);
-
+            RenderUtils.renderText(context, Component.literal(RenderUtils.formatNumber(health)).withColor(getColor(health)), EntityUtil.getLerpedPos(dragon), 5);
         });
     }
 }

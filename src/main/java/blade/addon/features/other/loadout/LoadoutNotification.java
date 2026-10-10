@@ -8,7 +8,6 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 
 public class LoadoutNotification extends CombineableNotification {
-
     public LoadoutNotification() {
         super("Loadout notification");
     }

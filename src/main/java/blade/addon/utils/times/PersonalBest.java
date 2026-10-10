@@ -37,14 +37,6 @@ public class PersonalBest {
         Misc.addChatMessage(text.append(getAsText(isPb)));
     }
 
-    public double getNewestTime() {
-        return newestTime;
-    }
-
-    public double getBestTime() {
-        return bestTime;
-    }
-
     private Component getAsText(boolean isPb) {
         if (isPb) {
             return Component.literal("§e" + Constants.DECIMAL_FORMAT.format(newestTime) + "s. §d§l(PB)").setStyle(Style.EMPTY);

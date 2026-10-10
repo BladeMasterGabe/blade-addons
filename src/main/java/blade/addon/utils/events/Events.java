@@ -36,6 +36,4 @@ public class Events {
     //screen
     public static final EventHandler<ScreenEvent> ON_SCREEN = new EventHandler<>();
     public static final EventHandler<SlotClickEvent> ON_SLOT_CLICKED = new EventHandler<>();
-
-
 }

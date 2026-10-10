@@ -20,15 +20,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SelectedPet {
-
     //https://hypixelskyblock.minecraft.wiki/w/Pets
     //https://cloudconvert.com/to-png
 
     private static final int COLOR_OFFSET = 2;
 
-    private static final Pattern TAB_PET_PATTERN = Pattern.compile(" \\[Lvl \\d+] (?:\\[[^\\]]+\\] )?(.+)");
-    private static final Pattern MANUAL_EQUIP_PET_PATTERN = Pattern.compile("^You (summoned|despawned) your (?:\\[Lvl \\d+] )?(?:\\[[^\\]]+\\] )?(.+)!$");
-    private static final Pattern RULE_EQUIP_PET_PATTERN = Pattern.compile("^Autopet equipped your \\[Lvl \\d+] (?:\\[[^\\]]+\\] )?(.+)! VIEW RULE$");
+    private static final Pattern TAB_PET_PATTERN = Pattern.compile(" \\[Lvl \\d+] (?:\\[[^]]+] )?(.+)");
+    private static final Pattern MANUAL_EQUIP_PET_PATTERN = Pattern.compile("^You (summoned|despawned) your (?:\\[Lvl \\d+] )?(?:\\[[^]]+] )?(.+)!$");
+    private static final Pattern RULE_EQUIP_PET_PATTERN = Pattern.compile("^Autopet equipped your \\[Lvl \\d+] (?:\\[[^]]+] )?(.+)! VIEW RULE$");
     private static final Pattern LEVEL_REGEX = Pattern.compile("\\[Lvl (\\d+)]");
 
     private static final int TOTAL_TICKS = 20;
@@ -49,7 +48,6 @@ public class SelectedPet {
             String string = message.getString();
             Matcher matcher = MANUAL_EQUIP_PET_PATTERN.matcher(string);
             if (matcher.find()) {
-
                 if (matcher.group(1).equals("despawned")) {
                     despawnPet();
                     return false;
@@ -114,24 +112,18 @@ public class SelectedPet {
             return false;
         });
 
-        ClientTickEvents.END_LEVEL_TICK.register((_ -> {
-            tick = Math.max(tick - 1, 0);
-        }));
-
+        ClientTickEvents.END_LEVEL_TICK.register((_ ->
+            tick = Math.max(tick - 1, 0)
+        ));
     }
 
     public static void testLoadoutClick(int container, int slotId, int button, ContainerInput containerInput, Player player) {
         if (!inLoadout || button != 0 || player == null) return;
 
         AbstractContainerMenu containerMenu = player.containerMenu;
-        if (containerMenu == null) {
-            Misc.addChatMessage(Component.literal("container is null"));
-            return;
-        }
 
         Component component = ItemUtil.findLore(containerMenu.getSlot(slotId).getItem(), "Pet: ");
         if (component == null) return;
-
 
         String string = component.getString();
         Matcher matcher = TAB_PET_PATTERN.matcher(string);
@@ -148,7 +140,6 @@ public class SelectedPet {
         currentPetLevel = -1;
         currentPetString = "";
         spriteId = null;
-
     }
 
     private static void summonPet(String stringName, MutableComponent textName, int level, boolean sendSound) {
@@ -207,5 +198,4 @@ public class SelectedPet {
     public static boolean displayNotification() {
         return ExtraOptions.sendPetSwapNotification && tick > 0;
     }
-
 }

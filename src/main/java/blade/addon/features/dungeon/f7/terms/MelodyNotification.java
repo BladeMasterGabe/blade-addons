@@ -21,7 +21,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MelodyNotification extends CombineableNotification {
-
     private static final Pattern PATTERN = Pattern.compile("(\\d+)%");
 
     private final CopyOnWriteArrayList<String> names = new CopyOnWriteArrayList<>();
@@ -110,8 +109,6 @@ public class MelodyNotification extends CombineableNotification {
         MutableComponent nameText = Component.literal(dungeonClass != null ? dungeonClass.name() : name != null? name: "Someone").setStyle(Style.EMPTY.withColor(color).withBold(true));
         MutableComponent infoText = Component.literal(" §r§dhas melody! " + num + "/4").setStyle(Style.EMPTY);
 
-        Component text = nameText.append(infoText);
-
-        return text;
+        return nameText.append(infoText);
     }
 }

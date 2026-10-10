@@ -25,7 +25,6 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class RenderUtils {
-
     private static final float TEXT_SCALE = 0.025f;
 
     public static float[] toFloats(int argb) {
@@ -49,7 +48,6 @@ public class RenderUtils {
         if (textRenderer == null) return;
         int centered = (maxWidth - textRenderer.width(text)) / 2;
         graphics.text(textRenderer, text, x + centered, y, color, true);
-
     }
 
     public static void drawCenteredText(GuiGraphicsExtractor graphics, HUDComponent component, Component text) {
@@ -99,13 +97,13 @@ public class RenderUtils {
 
     public static void renderText(LevelRenderContext context, Component text, double x, double y, double z, float scale) {
         PoseStack stack = cameraRelativePose(context, x, y, z);
-        stack.mulPose(context.levelState().cameraRenderState.orientation);
+        stack.rotate(context.levelState().cameraRenderState.orientation);
         stack.scale(TEXT_SCALE * scale, -TEXT_SCALE * scale, TEXT_SCALE * scale);
 
         float halfWidth = Minecraft.getInstance().font.width(text) / 2f;
         context.submitNodeCollector().submitCustom(SubmitRenderPhases.AFTER_TERRAIN,
-                new TextFeatureRenderer.Submit(new Matrix4f(stack.last().pose()), -halfWidth, 0f, text.getVisualOrderText(),
-                        true, Font.DisplayMode.SEE_THROUGH, LightCoordsUtil.FULL_BRIGHT, -1, 0, 0));
+                new TextFeatureRenderer.Submit(new Matrix4f(stack.last().pose()), Font.DisplayMode.SEE_THROUGH, LightCoordsUtil.FULL_BRIGHT,
+                        new TextFeatureRenderer.Content.Text(-halfWidth, 0f, text.getVisualOrderText(), true, -1, 0, 0)));
         stack.popPose();
     }
 
@@ -173,7 +171,6 @@ public class RenderUtils {
                              double x4, double y4, double z4,
 
                              float r, float g, float b, float a) {
-
         consumer.addVertex(matrix, (float) x1, (float) y1, (float) z1)
                 .setColor(r, g, b, a)
                 .setNormal(0, 1, 0);
@@ -189,7 +186,6 @@ public class RenderUtils {
         consumer.addVertex(matrix, (float) x4, (float) y4, (float) z4)
                 .setColor(r, g, b, a)
                 .setNormal(0, 1, 0);
-
     }
 
     private static void verticalLine(Matrix4f matrix,
@@ -197,7 +193,6 @@ public class RenderUtils {
                                      double x1, double y1, double z1,
                                      double x2, double y2, double z2,
                                      float r, float g, float b, float a, float width) {
-
         consumer.addVertex(matrix, (float) x1, (float) y1, (float) z1)
                 .setColor(r, g, b, a)
                 .setNormal(1, 0, 0).setLineWidth(width);
@@ -220,7 +215,6 @@ public class RenderUtils {
                                        double x1, double y1, double z1,
                                        double x2, double y2, double z2,
                                        float r, float g, float b, float a, float width) {
-
         consumer.addVertex(matrix, (float) x1, (float) y1, (float) z1)
                 .setColor(r, g, b, a)
                 .setNormal(0, 1, 0).setLineWidth(width);
@@ -231,14 +225,11 @@ public class RenderUtils {
     }
 
     private static void outlineBox(Matrix4f matrix, VertexConsumer consumer, AABB box, float[] rgba, float width) {
-
-
         if (rgba[3] == 0) return;
         float r = rgba[0];
         float g = rgba[1];
         float b = rgba[2];
         float a = rgba[3];
-
 
         double minX = box.minX;
         double minY = box.minY;
@@ -261,18 +252,14 @@ public class RenderUtils {
         verticalLine(matrix, consumer, maxX, minY, minZ, maxX, minY, maxZ, r, g, b, a, width);
         verticalLine(matrix, consumer, maxX, minY, maxZ, minX, minY, maxZ, r, g, b, a, width);
         verticalLine(matrix, consumer, minX, minY, maxZ, minX, minY, minZ, r, g, b, a, width);
-
-
     }
 
     private static void fillBox(Matrix4f matrix, VertexConsumer consumer, AABB box, float[] rgba) {
-
         if (rgba[3] == 0) return;
         float r = rgba[0];
         float g = rgba[1];
         float b = rgba[2];
         float a = rgba[3];
-
 
         double minX = box.minX;
         double minY = box.minY;
@@ -289,7 +276,6 @@ public class RenderUtils {
 
         quad(matrix, consumer, minX, maxY, minZ, minX, maxY, maxZ, maxX, maxY, maxZ, maxX, maxY, minZ, r, g, b, a);
         quad(matrix, consumer, maxX, minY, minZ, maxX, minY, maxZ, minX, minY, maxZ, minX, minY, minZ, r, g, b, a);
-
     }
 
     public static void renderFilledBlock(AABB box, int argb) {

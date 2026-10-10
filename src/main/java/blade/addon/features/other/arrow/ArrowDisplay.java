@@ -10,7 +10,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public class ArrowDisplay extends HUDComponent {
-
     public ArrowDisplay() {
         super("Selected arrow display");
     }

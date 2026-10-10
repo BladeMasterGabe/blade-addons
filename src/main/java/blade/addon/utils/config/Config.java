@@ -29,7 +29,6 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 
 public class Config {
-
     private static final Component TITLE = Component.literal("Blade Addons");
     public static final ConfigManager manager = new ConfigManager(FolderUtility.OLD_PATH + FolderUtility.ADDONS_NAME,
             List.of(Phase.class, Section.class, Split.class, MobHighlight.class, ExtraOptions.class, DianaNotifier.class, Components.class, Dungeons.class, Floor7.class, Buttons.class, Visual.class));
@@ -55,7 +54,6 @@ public class Config {
         notifications.add(new ConfigButton(Component.literal("Edit Notifications"), () -> Minecraft.getInstance().setScreenAndShow(new NotificationList())));
         notifications.add(new ConfigBool(Component.literal("Ignore color codes"), () -> ExtraOptions.ignoreColorCodesNotification, bool -> ExtraOptions.ignoreColorCodesNotification = bool));
         general.add(notifications);
-
 
         ConfigSection chatFilter = new ConfigSection(Component.literal("Chat filter"));
         chatFilter.add(new ConfigButton(Component.literal("Edit"), () -> Minecraft.getInstance().setScreenAndShow(new FilterList())));
@@ -109,7 +107,6 @@ public class Config {
         hidePlayers.add(new ConfigDouble(Component.literal("Hiding range"), () -> Dungeons.hidePlayerRange, num -> Dungeons.hidePlayerRange = num, 1, 0, 7));
         hidePlayers.add(new ConfigBool(Component.literal("Hide hidden teammate's highlight"), () -> Dungeons.dontHighlightHiddenTeammates, bool -> Dungeons.dontHighlightHiddenTeammates = bool));
         hidePlayers.add(new ConfigBool(Component.literal("Hide visible teammate's highlight"), () -> Dungeons.dontHighlightVisibleTeammates, bool -> Dungeons.dontHighlightVisibleTeammates = bool));
-
 
         dungeons.add(hidePlayers);
 
@@ -213,7 +210,6 @@ public class Config {
         sectionProgress.add(new ConfigBool(Component.literal("Include prev objective"), () -> Floor7.sectionPrevObjective, bool -> Floor7.sectionPrevObjective = bool));
         floor7.add(sectionProgress);
 
-
         ConfigSection titles = new ConfigSection(Component.literal("Terminal titles"));
         titles.add(new ConfigBool(Component.literal("Disable titles on pre4"), () -> Floor7.disableTitlesAtPre4, bool -> Floor7.disableTitlesAtPre4 = bool));
         titles.add(new ConfigBool(Component.literal("Disable titles on ss"), () -> Floor7.disableTitlesAtSS, bool -> Floor7.disableTitlesAtSS = bool));
@@ -263,7 +259,6 @@ public class Config {
         splits.add(new ConfigBool(Component.literal("Send split in chat when over"), () -> Phase.sendSplitInChat, bool -> Phase.sendSplitInChat = bool));
         splits.add(new ConfigOptions<>(Component.literal("Tick timer type"), Split.TimerType.values(), () -> Split.timerType, type -> Split.timerType = type));
         splits.add(new ConfigBool(Component.literal("Only show activated splits"), () -> Phase.onlyShowActivatedSplits, bool -> Phase.onlyShowActivatedSplits = bool));
-
 
         splits.add(new ConfigColor(Component.literal("Real time color (Inactive)"), () -> Split.realTimeColorInactive, color -> Split.realTimeColorInactive = color, "real-time-inactive", false));
         splits.add(new ConfigColor(Component.literal("Real time color (Ongoing)"), () -> Split.realTimeColorOngoing, color -> Split.realTimeColorOngoing = color, "real-time-ongoing", false));
@@ -319,7 +314,6 @@ public class Config {
     }
 
     private static ConfigCategory extra() {
-
         ConfigCategory extra = new ConfigCategory("Extra options");
         extra.add(new ConfigBool(Component.literal("Show pbs in chat"), () -> ExtraOptions.showPbs, bool -> ExtraOptions.showPbs = bool));
         extra.add(new ConfigBool(Component.literal("Disable scroll wheel in hotbar"), () -> ExtraOptions.disableScrollHotbar, bool -> ExtraOptions.disableScrollHotbar = bool));
@@ -334,7 +328,6 @@ public class Config {
         extra.add(new ConfigColor(Component.literal("Searchbar miss color"), () -> ExtraOptions.searchbarMissColor, color -> ExtraOptions.searchbarMissColor = color, "search-bar-miss-color", true));
         extra.add(new ConfigBool(Component.literal("Disable protect item (resets on launch)"), () -> ProtectItem.stopProtectItem, bool -> ProtectItem.stopProtectItem = bool));
         extra.add(new ConfigBool(Component.literal("Display reaper duration"), () -> ExtraOptions.enableReaperDisplay, bool -> ExtraOptions.enableReaperDisplay = bool));
-
 
         ConfigSection sound = new ConfigSection(Component.literal("Sound options"));
         sound.add(new ConfigBool(Component.literal("Disable \"on cooldown\" sound"), () -> ExtraOptions.disableAbilityCooldownSound, bool -> ExtraOptions.disableAbilityCooldownSound = bool));
@@ -444,5 +437,4 @@ public class Config {
         inventory.add(new ConfigString(Component.literal("Button 7"), () -> Buttons.command7, str -> Buttons.command7 = str));
         return inventory;
     }
-
 }
