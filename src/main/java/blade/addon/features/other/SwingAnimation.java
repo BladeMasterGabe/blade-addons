@@ -4,7 +4,6 @@ import blade.addon.features.item.DropAnimation;
 import net.minecraft.world.item.ItemStack;
 
 public class SwingAnimation {
-
     private static int ignoreCount = 0;
 
     /**

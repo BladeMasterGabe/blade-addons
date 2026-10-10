@@ -8,7 +8,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 
 public class Notification {
-
     private String matchString, notificationString, command;
     private boolean useRegex, sendCommand, enabled;
     private int ticks;

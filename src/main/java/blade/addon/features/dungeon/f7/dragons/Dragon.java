@@ -23,24 +23,16 @@ public enum Dragon {
         this.spawnPos = spawnPos;
     }
 
-    //checks are from valley addons
+    // checks are from valley addons
     public static Dragon getDragon(double x, double y, double z) {
         if (y >= 14 && y <= 19) {
             if (x >= 27 && x <= 32) {
-                if (z == 59) {
-                    return Dragon.RED;
-                } else if (z == 94) {
-                    return Dragon.GREEN;
-                }
+                if (z == 59) return Dragon.RED;
+                else if (z == 94) return Dragon.GREEN;
             } else if (x >= 79 && x <= 85) {
-                if (z == 94) {
-                    return Dragon.BLUE;
-                } else if (z == 56) {
-                    return Dragon.ORANGE;
-                }
-            } else if (x == 56) {
-                return Dragon.PURPLE;
-            }
+                if (z == 94) return Dragon.BLUE;
+                else if (z == 56) return Dragon.ORANGE;
+            } else if (x == 56) return Dragon.PURPLE;
         }
         return Dragon.NONE;
     }

@@ -13,14 +13,12 @@ import net.minecraft.world.phys.AABB;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MimicHighlight {
-
     private static final AABB box = new AABB(0.0625, 0, 0.0625, 0.9375, 0.875, 0.9375);
 
     private static final ConcurrentLinkedQueue<TrappedChestBlockEntity> mimics = new ConcurrentLinkedQueue<>();
 
     public static void init() {
-
-        Events.ON_LOCATION_CHANGE.register(location -> {
+        Events.ON_LOCATION_CHANGE.register(_ -> {
             mimics.clear();
             return false;
         });
@@ -33,12 +31,11 @@ public class MimicHighlight {
            return false;
        });
 
-       ClientTickEvents.END_CLIENT_TICK.register(client -> mimics.removeIf(BlockEntity::isRemoved));
+       ClientTickEvents.END_CLIENT_TICK.register(_ -> mimics.removeIf(BlockEntity::isRemoved));
 
         LevelRenderEvents.COLLECT_SUBMITS.register(MimicHighlight::renderFilled);
         LevelRenderEvents.COLLECT_SUBMITS.register(MimicHighlight::renderOutline);
     }
-
 
     private static void renderFilled(LevelRenderContext context) {
         if (!MobHighlight.highlightMimicChests || MobHighlight.renderFilled()) return;

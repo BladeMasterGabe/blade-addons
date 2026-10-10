@@ -9,7 +9,6 @@ public class Waypoint {
     private final float r, g, b, a;
     private final boolean throughWall;
 
-
     public Waypoint(double x, double y, double z, double dx, double dy, double dz, float r, float g, float b, float a, boolean throughWall) {
         this.x = x;
         this.y = y;

@@ -11,9 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(RecipeBookComponent.class)
 public class RecipeBookComponentMixin {
-
     @Inject(method = "extractRenderState", at = @At("HEAD"), cancellable = true)
-    public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
+    public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci) {
         if (ExtraOptions.disableRecipeBook) {
             ci.cancel();
         }
@@ -24,11 +23,10 @@ public class RecipeBookComponentMixin {
         if (ExtraOptions.disableRecipeBook) {
             cir.setReturnValue(false);
         }
-
     }
 
     @Inject(method = "setVisible", at = @At("HEAD"), cancellable = true)
-    public void render(boolean opened, CallbackInfo ci) {
+    public void render(boolean visible, CallbackInfo ci) {
         if (ExtraOptions.disableRecipeBook) {
             ci.cancel();
         }

@@ -15,7 +15,7 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -27,7 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MobHighlight {
-
     public enum MobType {
         STAR, TANK, MINI, FEL, ASSASSIN, MIMIC
     }
@@ -116,16 +115,14 @@ public class MobHighlight {
     @ConfigValue
     public static int sheepOutlineColor = 0xffffffff;
 
-
     public static void init() {
-
-        Events.ON_ENTITY_SPAWNED.register((entity, world) -> {
+        Events.ON_ENTITY_SPAWNED.register((entity, _) -> {
             if (entity instanceof ArmorStand) return false;
             foundEntities.put(entity.getId(), entity);
             return false;
         });
 
-        Events.ON_ENTITY_TRACKED.register((entity, world) -> {
+        Events.ON_ENTITY_TRACKED.register((entity, _) -> {
             if (!Location.inDungeon()) return false;
 
             if (entity instanceof Player player) {
@@ -141,7 +138,7 @@ public class MobHighlight {
             return false;
         });
 
-        Events.ON_LOCATION_CHANGE.register(newLocation -> {
+        Events.ON_LOCATION_CHANGE.register(_ -> {
             savedEntities.clear();
             foundEntities.clear();
             nonStaredTags.clear();
@@ -154,7 +151,7 @@ public class MobHighlight {
             dontRenderHighlight = player.hasEffect(MobEffects.BLINDNESS);
         });
 
-        ClientEntityEvents.ENTITY_UNLOAD.register((entity, world) -> {
+        ClientEntityEvents.ENTITY_UNLOAD.register((entity, _) -> {
             int id = entity.getId();
             savedEntities.removeIf(dataHolder -> dataHolder.entity == entity);
             foundEntities.remove(id);
@@ -271,7 +268,6 @@ public class MobHighlight {
         };
     }
 
-
     public static boolean renderFilled() {
         return currentHighlight != HighlightType.BOTH && currentHighlight != HighlightType.FILLED;
     }
@@ -284,7 +280,7 @@ public class MobHighlight {
         AABB box = EntityUtil.getBox(entity);
 
         //only shows the head
-        if (entity instanceof EnderMan && entity.isInvisible() && MobHighlight.dontShowInvisibleMobs) {
+        if (entity instanceof Enderman && entity.isInvisible() && MobHighlight.dontShowInvisibleMobs) {
             box = box.inflate(0, -1.8, 0).move(0, -1.2, 0);
         }
 
@@ -297,7 +293,6 @@ public class MobHighlight {
 
         return box;
     }
-
 
     private static void renderFilled(LevelRenderContext context) {
         if (!MobHighlight.mobHighlight || dontRenderHighlight || MobHighlight.renderFilled()) return;
@@ -313,7 +308,6 @@ public class MobHighlight {
             float[] rgba = RenderUtils.toFloats(filledColor);
 
             RenderUtils.drawFilledBox(context, box, rgba);
-
         }
     }
 

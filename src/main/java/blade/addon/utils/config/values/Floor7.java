@@ -5,7 +5,6 @@ import config.practical.manager.ConfigValue;
 import net.minecraft.sounds.SoundEvents;
 
 public class Floor7 {
-
     @ConfigValue
     public static boolean enableBossWaypoints = false;
 

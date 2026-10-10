@@ -11,7 +11,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public class DragonSpawnTimer extends HUDComponent {
-
     public DragonSpawnTimer() {
         super("Dragon spawn timer");
     }

@@ -14,7 +14,6 @@ import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 
 public class LeapOrder {
-
     private static final Pattern PATTERN = Pattern.compile("\\[([TBMAH])] (\\w+) ");
 
     private static final DungeonClass[] ARCHER_ORDER = {DungeonClass.BERSERK, DungeonClass.HEALER, DungeonClass.MAGE, DungeonClass.TANK};
@@ -26,7 +25,6 @@ public class LeapOrder {
     private static final DungeonClass[] ALPHABETICAL_ORDER = {DungeonClass.ARCHER, DungeonClass.BERSERK, DungeonClass.HEALER, DungeonClass.MAGE, DungeonClass.TANK};
 
     public static void leapOrder(String backupMage, boolean odinOrder) {
-
         HashMap<DungeonClass, String> classNameMap = new HashMap<>();
         DungeonClass playersClass = null;
 
@@ -101,5 +99,4 @@ public class LeapOrder {
             default -> null;
         };
     }
-
 }

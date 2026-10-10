@@ -18,21 +18,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(InventoryScreen.class)
 public abstract class InventoryScreenMixin extends AbstractRecipeBookScreen<InventoryMenu> {
-
     public InventoryScreenMixin(InventoryMenu handler, RecipeBookComponent<?> recipeBook, Inventory inventory, Component title) {
         super(handler, recipeBook, inventory, title);
     }
 
     @Inject(method = "extractRenderState(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIF)V", at = @At("TAIL"))
-    public void render(GuiGraphicsExtractor context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
-        Matrix3x2fStack stack = context.pose();
+    public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci) {
+        Matrix3x2fStack stack = graphics.pose();
         int x = this.leftPos;
         int y = this.topPos;
         stack.pushMatrix();
         stack.translate(x, y);
-        InventoryButton.renderAll(context, mouseX, mouseY, deltaTicks);
+        InventoryButton.renderAll(graphics, mouseX, mouseY, a);
         stack.popMatrix();
-        SearchBar.render(context, mouseX, mouseY, deltaTicks);
+        SearchBar.render(graphics, mouseX, mouseY, a);
     }
 
     @Override
@@ -42,8 +41,7 @@ public abstract class InventoryScreenMixin extends AbstractRecipeBookScreen<Inve
     }
 
     @Inject(method = "extractLabels", at = @At("HEAD"), cancellable = true)
-    protected void drawForeground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, CallbackInfo ci) {
+    protected void drawForeground(GuiGraphicsExtractor graphics, int xm, int ym, CallbackInfo ci) {
         ci.cancel();
     }
-
 }

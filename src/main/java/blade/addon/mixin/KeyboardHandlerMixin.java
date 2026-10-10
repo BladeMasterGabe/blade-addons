@@ -14,13 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(KeyboardHandler.class)
 public class KeyboardHandlerMixin {
-
     @Inject(method = "charTyped", at= @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;charTyped(Lnet/minecraft/client/input/CharacterEvent;)Z"))
-    private void onChar(long window, CharacterEvent input, CallbackInfo ci, @Local Screen screen) {
+    private void onChar(long handle, CharacterEvent event, CallbackInfo ci, @Local(name = "screen") Screen screen) {
         if (ExtraOptions.toggleableSearchBar && screen instanceof AbstractContainerScreen<?>) {
-            SearchBar.CharTyped(input);
+            SearchBar.CharTyped(event);
         }
     }
-
-
 }

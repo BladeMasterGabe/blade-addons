@@ -12,11 +12,9 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 public class NotificationEditScreen extends Screen {
-
     private final Screen parent;
     private final ConfigScroll scroll;
     private final Notification notification;
-
 
     protected NotificationEditScreen(Notification notification) {
         super(Component.empty());
@@ -50,7 +48,6 @@ public class NotificationEditScreen extends Screen {
 
     @Override
     public void onClose() {
-        assert this.minecraft != null;
         this.minecraft.setScreenAndShow(this.parent);
     }
 }

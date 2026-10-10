@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public class EntityMixin {
-
     @Inject(method = "isCurrentlyGlowing", at = @At("HEAD"), cancellable = true)
     public void isGlowing(CallbackInfoReturnable<Boolean> cir) {
         if (Visual.disableGlowing) {

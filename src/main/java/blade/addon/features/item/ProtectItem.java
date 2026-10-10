@@ -27,7 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 
 public class ProtectItem {
-
     private static final Identifier SPRITE = Identifier.fromNamespaceAndPath(Constants.NAMESPACE, "lock");
 
     public static final ConfigManager itemManager = new ConfigManager(FolderUtility.OLD_PATH + FolderUtility.PROTECT_ITEMS_NAME,
@@ -107,12 +106,10 @@ public class ProtectItem {
         context.blitSprite(RenderPipelines.GUI_TEXTURED, SPRITE, x, y, 16, 16, 0x99ffffff);
     }
 
-    public static boolean blockGUI(AbstractContainerScreen screen, ItemStack item) {
+    public static boolean blockGUI(AbstractContainerScreen<?> screen, ItemStack item) {
         if (!protect(item)) return false;
 
-
         Component title = screen.getTitle();
-        if (title == null) return false;
         String name = title.getString();
 
         if (name.contains("Auction")) {
@@ -132,7 +129,7 @@ public class ProtectItem {
             Slot slot = slots.get(49);
             ItemStack stack = slot.getItem();
             Component itemName = stack.getHoverName();
-            if (itemName != null && itemName.getString().contains("Sell Item") || ItemUtil.containsLore(stack, "Click to buyback!")) {
+            if (itemName.getString().contains("Sell Item") || ItemUtil.containsLore(stack, "Click to buyback!")) {
                 Misc.addChatMessage(Component.literal("Protected ").append(item.getHoverName()).append(" From being sold"));
                 return true;
             }
@@ -140,11 +137,10 @@ public class ProtectItem {
             slot = slots.get(4);
             stack = slot.getItem();
             itemName = stack.getHoverName();
-            if (itemName != null && itemName.getString().contains("⇦ Your stuff")) {
+            if (itemName.getString().contains("⇦ Your stuff")) {
                 Misc.addChatMessage(Component.literal("Protected ").append(item.getHoverName()).append(" From being traded"));
                 return true;
             }
-
         }
         return false;
     }

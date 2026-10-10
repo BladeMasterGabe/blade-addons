@@ -18,7 +18,6 @@ import net.minecraft.world.phys.AABB;
 import java.util.ArrayList;
 
 public class PositionMessages {
-
     static final ArrayList<PositionMessage> positionMessages = new ArrayList<>();
 
     static PositionMessage SS = new PositionMessage("At SS!", new String[]{"ss"}, new AABB(107, 120, 93, 110, 121, 95), new int[]{0, 1});
@@ -35,7 +34,7 @@ public class PositionMessages {
     public static void init() {
         ClientTickEvents.END_CLIENT_TICK.register(PositionMessages::tick);
         LevelRenderEvents.COLLECT_SUBMITS.register(PositionMessages::render);
-        Events.ON_LOCATION_CHANGE.register(newLocation -> {
+        Events.ON_LOCATION_CHANGE.register(_ -> {
             disableAll();
             return false;
         });
@@ -66,8 +65,6 @@ public class PositionMessages {
             }
             return false;
         });
-
-
     }
 
     public static void tick(Minecraft client) {

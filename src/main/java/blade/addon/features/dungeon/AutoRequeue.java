@@ -11,11 +11,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AutoRequeue {
-
     private static final Pattern LEFT_PATTERN = Pattern.compile("has left the party.$");
 
     private static final HashMap<String, String> playerHashMap = new HashMap<>();
-
 
     private static boolean someoneLeft = false;
 
@@ -54,13 +52,11 @@ public class AutoRequeue {
             } else {
                 Misc.addChatMessage(Component.literal("Downtime reasons:"));
                 playerHashMap.forEach((name, string) -> Misc.addChatMessage((Component.literal(name + "> " + string))));
-
-
             }
             return false;
         });
 
-        Events.ON_LOCATION_CHANGE.register(newLocation -> {
+        Events.ON_LOCATION_CHANGE.register(_ -> {
             playerHashMap.clear();
             someoneLeft = false;
             return false;

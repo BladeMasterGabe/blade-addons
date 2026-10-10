@@ -7,7 +7,6 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 
 public class NotificationDisplay extends CombineableNotification {
-
     public NotificationDisplay() {
         super("Chat notification");
     }

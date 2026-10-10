@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class DrawHandler <T> {
-
     private final List<T> listeners = new ArrayList<>();
 
     public void register(T listener) {
@@ -18,5 +17,4 @@ public class DrawHandler <T> {
             action.accept(listener);
         }
     }
-
 }

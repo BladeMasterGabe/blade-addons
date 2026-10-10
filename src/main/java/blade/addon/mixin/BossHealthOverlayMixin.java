@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(BossHealthOverlay.class)
 public class BossHealthOverlayMixin {
-
     @Redirect(
             method = "extractRenderState",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/LerpingBossEvent;getName()Lnet/minecraft/network/chat/Component;")
@@ -51,6 +50,4 @@ public class BossHealthOverlayMixin {
             return bossBar.getName();
         }
     }
-
-
 }

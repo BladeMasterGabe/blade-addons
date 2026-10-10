@@ -8,9 +8,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 public class Split {
-
     public enum TimerType {
-        TICK_TIME("Tick time"), DIFFRENCE("difference");
+        TICK_TIME("Tick time"), DIFFERENCE("difference");
 
         private final String label;
 
@@ -135,7 +134,7 @@ public class Split {
         return Component.literal(name + " ").withColor(color);
     }
 
-    public double getTimeDiffrence() {
+    public double getTimeDifference() {
         return getRealTime() - getTickTime();
     }
 
@@ -160,7 +159,7 @@ public class Split {
         double realTime = getRealTime();
 
         String serverTime;
-        if (timerType == TimerType.DIFFRENCE) {
+        if (timerType == TimerType.DIFFERENCE) {
             double diff = realTime - tickTime;
             if (diff > 0) {
                 serverTime = "+" + Constants.DECIMAL_FORMAT.format(diff) + "s";

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersonalBests {
-
     private static final ArrayList<PersonalBest> pbList = new ArrayList<>();
 
     public static final ConfigManager pbManager = new ConfigManager(FolderUtility.CONFIG_PATH + FolderUtility.PBS_NAME,
@@ -57,5 +56,4 @@ public class PersonalBests {
     public static void register(PersonalBest personalBest) {
         pbList.add(personalBest);
     }
-
 }

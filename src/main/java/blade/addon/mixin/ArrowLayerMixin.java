@@ -9,12 +9,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ArrowLayer.class)
 public class ArrowLayerMixin {
-
     @Inject(method = "numStuck", at=@At("TAIL"), cancellable = true)
     public void shouldRender(CallbackInfoReturnable<Integer> cir) {
         if (Visual.hideStuckArrows) {
             cir.setReturnValue(0);
         }
-
     }
 }

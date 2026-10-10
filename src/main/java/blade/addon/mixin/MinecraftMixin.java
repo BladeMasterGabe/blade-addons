@@ -20,16 +20,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
-
     @Shadow
     @Nullable
     public HitResult hitResult;
 
     @Inject(method = "startUseItem", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/item/ItemStack;getCount()I"), cancellable = true)
-    private void testInteractionBlock(CallbackInfo ci, @Local ItemStack itemStack) {
+    private void testInteractionBlock(CallbackInfo ci, @Local(name = "heldItem") ItemStack heldItem) {
         BlockHitResult blockHitResult = (BlockHitResult) this.hitResult;
         if (blockHitResult == null) return;
-        if (Events.ON_BLOCK_INTERACTION.invoke(blockInteractionEvent -> blockInteractionEvent.interact(blockHitResult, itemStack))) {
+        if (Events.ON_BLOCK_INTERACTION.invoke(blockInteractionEvent -> blockInteractionEvent.interact(blockHitResult, heldItem))) {
             ci.cancel();
         }
     }
@@ -39,8 +38,8 @@ public class MinecraftMixin {
         DropAnimation.clearData();
     }
 
-    @Inject(method = "updateLevelInEngines", at = @At(value = "TAIL"))
-    private void onWorld(ClientLevel world, CallbackInfo ci) {
+    @Inject(method = "updateLevelInEngines(Lnet/minecraft/client/multiplayer/ClientLevel;Z)V", at = @At(value = "TAIL"))
+    private void onWorld(ClientLevel level, boolean stopSound, CallbackInfo ci) {
         Events.ON_WORLD_CHANGE.invoke(WorldEvent::onWorldSwap);
     }
 

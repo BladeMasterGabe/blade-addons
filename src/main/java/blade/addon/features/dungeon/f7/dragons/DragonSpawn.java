@@ -10,7 +10,6 @@ import net.minecraft.sounds.SoundEvents;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class DragonSpawn {
-
     public static final int SPAWN_DURATION = 100;
 
     private static final ConcurrentLinkedQueue<Dragon> dragons = new ConcurrentLinkedQueue<>();
@@ -18,7 +17,7 @@ public class DragonSpawn {
     public static void init() {
         Events.ON_PARTICLE.register(packet -> {
             if (!validParticle(packet)) return false;
-            Dragon dragon = Dragon.getDragon(packet.getX(), packet.getY(), packet.getZ());
+            Dragon dragon = Dragon.getDragon(packet.x(), packet.y(), packet.z());
             addDragon(dragon);
             return false;
         });
@@ -41,7 +40,6 @@ public class DragonSpawn {
     private static void addDragon(Dragon dragon) {
         if (dragon == Dragon.NONE || dragons.contains(dragon) || dragon.tick > 0) return;
 
-
         dragon.tick = SPAWN_DURATION;
         dragons.add(dragon);
 
@@ -50,16 +48,15 @@ public class DragonSpawn {
         }
     }
 
-
     private static boolean validParticle(ClientboundLevelParticlesPacket packet) {
-        if (packet.getCount() != 20) return false;
-        if (packet.getY() != 19) return false;
-        if (packet.getParticle().getType() != ParticleTypes.FLAME) return false;
-        if (packet.getXDist() != 2) return false;
-        if (packet.getYDist() != 3) return false;
-        if (packet.getZDist() != 2) return false;
-        if (packet.getX() % 1 != 0) return false;
-        return packet.getZ() % 1 == 0;
+        if (packet.count() != 20) return false;
+        if (packet.y() != 19) return false;
+        if (packet.particle().getType() != ParticleTypes.FLAME) return false;
+        if (packet.xDist() != 2) return false;
+        if (packet.yDist() != 3) return false;
+        if (packet.zDist() != 2) return false;
+        if (packet.x() % 1 != 0) return false;
+        return packet.z() % 1 == 0;
     }
 
     private static void resetInfo() {
