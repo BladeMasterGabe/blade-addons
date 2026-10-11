@@ -100,7 +100,7 @@ public class MelodyNotification extends CombineableNotification {
     @Override
     public Component getText() {
         DungeonClass dungeonClass = DungeonClass.getClass(name);
-        int num = Math.min(furthestProgress / 25, 3);
+        int num = Math.min(furthestProgress / 33, 2);
 
         int color = Constants.DARK_PURPLE;
         if (Dungeons.useClassColors) {
@@ -108,7 +108,7 @@ public class MelodyNotification extends CombineableNotification {
         }
 
         MutableComponent nameText = Component.literal(dungeonClass != null ? dungeonClass.name() : name != null? name: "Someone").setStyle(Style.EMPTY.withColor(color).withBold(true));
-        MutableComponent infoText = Component.literal(" §r§dhas melody! " + num + "/4").setStyle(Style.EMPTY);
+        MutableComponent infoText = Component.literal(" §r§dhas melody! " + num + "/3").setStyle(Style.EMPTY);
 
         Component text = nameText.append(infoText);
 

@@ -273,11 +273,11 @@ public class MobHighlight {
 
 
     public static boolean renderFilled() {
-        return currentHighlight != HighlightType.BOTH && currentHighlight != HighlightType.FILLED;
+        return currentHighlight == HighlightType.BOTH || currentHighlight == HighlightType.FILLED;
     }
 
     public static boolean renderOutline() {
-        return currentHighlight != HighlightType.BOTH && currentHighlight != HighlightType.OUTLINE;
+        return currentHighlight == HighlightType.BOTH || currentHighlight == HighlightType.OUTLINE;
     }
 
     public static AABB getBox(Entity entity) {
@@ -300,7 +300,7 @@ public class MobHighlight {
 
 
     private static void renderFilled(LevelRenderContext context) {
-        if (!MobHighlight.mobHighlight || dontRenderHighlight || MobHighlight.renderFilled()) return;
+        if (!MobHighlight.mobHighlight || dontRenderHighlight || !MobHighlight.renderFilled()) return;
 
         for (DataHolder savedEntity : savedEntities) {
             Entity entity = savedEntity.entity;
@@ -318,7 +318,7 @@ public class MobHighlight {
     }
 
     private static void renderOutline(LevelRenderContext context) {
-        if (!MobHighlight.mobHighlight || dontRenderHighlight || MobHighlight.renderOutline()) return;
+        if (!MobHighlight.mobHighlight || dontRenderHighlight || !MobHighlight.renderOutline()) return;
 
         for (DataHolder savedEntity : savedEntities) {
             Entity entity = savedEntity.entity;
