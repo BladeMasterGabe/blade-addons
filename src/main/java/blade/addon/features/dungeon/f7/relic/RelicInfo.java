@@ -9,11 +9,14 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
 
+import java.util.ArrayList;
+
 public class RelicInfo {
+
+    public static ArrayList<Integer> ticks = new ArrayList<>();
 
     static boolean spawned = false;
     static boolean trackSound = false;
-    static boolean trackHealth = false;
 
     static int tickSound = 0;
     static int tickHealth = 0;
@@ -22,7 +25,6 @@ public class RelicInfo {
 
         Events.ON_WORLD_CHANGE.register(() -> {
             trackSound = false;
-            trackHealth = false;
             spawned = false;
             tickSound = 0;
             tickHealth = 0;
@@ -38,7 +40,7 @@ public class RelicInfo {
                     Component custom = armorStand.getItemBySlot(EquipmentSlot.HEAD).getCustomName();
                     if (custom != null && custom.getString().contains("Relic")) {
                         Misc.addChatMessage(Component.literal("ticks since (Sound) for relic: " + tickSound));
-                        Misc.addChatMessage(Component.literal("ticks since (health) for relic: " + tickHealth));
+                        ticks.add(tickSound);
                         spawned = true;
                     }
                 }
@@ -59,7 +61,6 @@ public class RelicInfo {
         Events.ON_SERVER_TICK.register(() -> {
             if (spawned) return false;
             if (trackSound) tickSound++;
-            if (trackHealth) tickHealth++;
             return false;
         });
     }
@@ -68,8 +69,5 @@ public class RelicInfo {
         return Phase.inP4() || Phase.inP5();
     }
 
-    public static void startBar() {
-        trackHealth = true;
-    }
 
 }
