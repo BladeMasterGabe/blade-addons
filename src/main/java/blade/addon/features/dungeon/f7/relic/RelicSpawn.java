@@ -61,6 +61,8 @@ public class RelicSpawn {
     private static boolean sentRelicTimes = false;
 
     public static void init() {
+        RelicInfo.init();
+
         Events.ON_SERVER_TICK.register(() -> {
 
             if (!Location.inDungeon()) return false;

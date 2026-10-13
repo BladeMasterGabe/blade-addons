@@ -1,12 +1,14 @@
 package blade.addon.utils.config;
 
 import blade.addon.features.dungeon.f7.BossWaypoints;
+import blade.addon.features.dungeon.f7.StormLBTimer;
 import blade.addon.features.dungeon.f7.invincibility.InvincibilityTimer;
 import blade.addon.features.filter.FilterList;
 import blade.addon.features.highlight.MobHighlight;
 import blade.addon.features.item.ProtectItem;
 import blade.addon.features.notifications.NotificationList;
 import blade.addon.features.other.DianaNotifier;
+import blade.addon.utils.Constants;
 import blade.addon.utils.config.components.Components;
 import blade.addon.utils.config.values.*;
 import blade.addon.utils.dungeon.Phase;
@@ -250,7 +252,7 @@ public class Config {
 
         ConfigSection stormlb = new ConfigSection(Component.literal("Storm lb"));
         stormlb.add(new ConfigBool(Component.literal("Enable"), () -> Floor7.showLBTimer, bool ->  Floor7.showLBTimer = bool));
-        stormlb.add(new ConfigInt(Component.literal("Tick offset (34:00 is at 0)"), () -> Floor7.lbTickOffset, num -> Floor7.lbTickOffset = num, 1, 0, 20));
+        stormlb.add(new ConfigInt(Component.literal("Tick offset (" + Constants.DECIMAL_FORMAT.format(StormLBTimer.BASE_LB_TICK * Constants.TICK_DURATION) + " is at 0)"), () -> Floor7.lbTickOffset, num -> Floor7.lbTickOffset = num, 1, 0, 20));
         floor7.add(stormlb);
 
         return floor7;

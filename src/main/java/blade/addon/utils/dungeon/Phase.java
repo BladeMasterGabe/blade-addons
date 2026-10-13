@@ -218,6 +218,10 @@ public class Phase {
         return (currentPhase == 6 || currentPhase == 7) && inFloor7;
     }
 
+    public static boolean inP4() {
+        return currentPhase == 8 && inFloor7;
+    }
+
     public static boolean inP5() {
         return currentPhase == 9 && inFloor7 && inMasterMode;
     }

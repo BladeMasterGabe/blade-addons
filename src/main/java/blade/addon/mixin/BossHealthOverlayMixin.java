@@ -1,5 +1,6 @@
 package blade.addon.mixin;
 
+import blade.addon.features.dungeon.f7.relic.RelicInfo;
 import blade.addon.utils.config.values.Dungeons;
 import blade.addon.utils.debug.Debug;
 import blade.addon.utils.rendering.RenderUtils;
@@ -45,6 +46,7 @@ public class BossHealthOverlayMixin {
             }
 
             float currHealth = health * bossBar.getProgress();
+            if (currHealth == 0) RelicInfo.startBar();
             return Component.literal("§c" + name + " §a" + RenderUtils.formatNumber(currHealth) + "§7/§a" + RenderUtils.formatNumber(health));
         } catch (Exception e) {
             Debug.LOGGER.error("Failed to modify bossbar name!", e);
