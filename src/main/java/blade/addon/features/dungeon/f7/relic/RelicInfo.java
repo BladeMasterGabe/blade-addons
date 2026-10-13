@@ -21,6 +21,8 @@ public class RelicInfo {
     public static void init() {
 
         Events.ON_WORLD_CHANGE.register(() -> {
+            trackSound = false;
+            trackHealth = false;
             spawned = false;
             tickSound = 0;
             tickHealth = 0;
