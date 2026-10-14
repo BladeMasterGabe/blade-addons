@@ -27,7 +27,7 @@ public class RerollBlocker {
         });
 
         Events.ON_SLOT_CLICKED.register((slot, slotId, _, containerInput, screen) -> {
-            if (!Dungeons.blockExpensiveRerolls || !Location.in(Location.DUNGEON_HUB)) return false;
+            if (!Dungeons.blockExpensiveRerolls || (!Location.in(Location.DUNGEON_HUB) && !Location.in(Location.DUNGEON))) return false;
             if (containerInput == ContainerInput.THROW) return false;
             if (slotId != 50 || slot.getItem().getItem() != Items.FEATHER) return false;
 
