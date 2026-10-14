@@ -35,9 +35,7 @@ public class RelicTimer extends CombineableTickTimer {
 
     @Override
     public boolean shouldRender() {
-        return false;
-        //return Floor7.enableRelicStartTimer && Location.inDungeon() && RelicSpawn.getTick() > -1 && !Floor7.replaceWithProgressBar;
-
+        return Floor7.enableRelicStartTimer && Location.inDungeon() && RelicSpawn.getTick() > -1 && !Floor7.replaceWithProgressBar && RelicSpawn.isNecronDead();
     }
 
     @Override

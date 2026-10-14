@@ -236,7 +236,7 @@ public class Config {
         relic.add(new ConfigBool(Component.literal("Relic start timer"), () -> Floor7.enableRelicStartTimer, bool -> Floor7.enableRelicStartTimer = bool));
         relic.add(new ConfigBool(Component.literal("Replace with progress bar"), () -> Floor7.replaceWithProgressBar, bool -> Floor7.replaceWithProgressBar = bool));
         relic.add(new ConfigBool(Component.literal("Use valleys progress bar"), () -> Floor7.useValleyBar, bool -> Floor7.useValleyBar = bool));
-        relic.add(new ConfigInt(Component.literal("Relic start timer ticks"), () -> Floor7.relicSpawnTicks, num -> Floor7.relicSpawnTicks = num, 1, 30, 50));
+        relic.add(new ConfigInt(Component.literal("Relic start timer tick (61 default)"), () -> Floor7.relicSpawnTick, num -> Floor7.relicSpawnTick = num, 1, 50, 70));
         relic.add(new ConfigBool(Component.literal("Enable relic placed time"), () -> Floor7.enableRelicPlaceTime, bool -> Floor7.enableRelicPlaceTime = bool));
         relic.add(new ConfigBool(Component.literal("Block incorrect relic place (right click only)"), () -> Floor7.blockIncorrectRelicPlace, bool -> Floor7.blockIncorrectRelicPlace = bool));
         relic.add(new ConfigBool(Component.literal("Highlight picked up relic"), () -> Floor7.renderRelicHighlight, bool -> Floor7.renderRelicHighlight = bool));

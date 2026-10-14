@@ -1,6 +1,5 @@
 package blade.addon.utils.debug;
 
-import blade.addon.features.dungeon.f7.relic.RelicInfo;
 import blade.addon.features.dungeon.f7.relic.RelicSpawn;
 import blade.addon.utils.Constants;
 import blade.addon.utils.Location;
@@ -20,8 +19,6 @@ import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 public class Debug {
 
@@ -97,11 +94,6 @@ public class Debug {
                         .then(ClientCommands.literal("getRelic").executes(_ -> {
                             RelicSpawn.printRelic();
                             return Constants.SUCCESS;
-                        }))
-
-                        .then(literal("list").executes(context -> {
-                            Misc.addChatMessage(Component.literal(RelicInfo.ticks.toString()));
-                            return 1;
                         }))
 
                 )

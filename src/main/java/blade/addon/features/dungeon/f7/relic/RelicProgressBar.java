@@ -36,8 +36,7 @@ public class RelicProgressBar extends HUDComponent {
 
     @Override
     public boolean shouldRender() {
-        return false;
-        //return Floor7.enableRelicStartTimer && Location.inDungeon() && RelicSpawn.getTick() > -1 && Floor7.replaceWithProgressBar;
+        return Floor7.enableRelicStartTimer && Location.inDungeon() && RelicSpawn.getTick() > -1 && Floor7.replaceWithProgressBar && RelicSpawn.isNecronDead();
     }
 
     @Override
@@ -55,7 +54,7 @@ public class RelicProgressBar extends HUDComponent {
         StringBuilder message = new StringBuilder("§8[");
 
         if (Floor7.useValleyBar) {
-            for (int i = 0; i < Floor7.relicSpawnTicks; ++i) {
+            for (int i = 0; i < Floor7.relicSpawnTick; ++i) {
                 if (i < tick) {
                     if (tick > 2) message.append("§a|");
                     else message.append("§c|");
@@ -63,8 +62,8 @@ public class RelicProgressBar extends HUDComponent {
             }
             message.append("§8]");
         } else {
-            int diff = Floor7.relicSpawnTicks - tick;
-            for (int i = 0; i < Floor7.relicSpawnTicks; i++) {
+            int diff = Floor7.relicSpawnTick - tick;
+            for (int i = 0; i < Floor7.relicSpawnTick; i++) {
                 if (i < diff) {
                     if (tick < 2) message.append("§a|");
                     else message.append("§c|");

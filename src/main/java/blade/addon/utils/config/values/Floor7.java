@@ -52,7 +52,7 @@ public class Floor7 {
     public static boolean enableRelicStartTimer = false;
 
     @ConfigValue
-    public static int relicSpawnTicks = 42;
+    public static int relicSpawnTick = 61;
 
     @ConfigValue
     public static boolean enableRelicPlaceTime = false;

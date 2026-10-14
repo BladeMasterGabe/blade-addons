@@ -20,8 +20,10 @@ import net.minecraft.gizmos.GizmoStyle;
 import net.minecraft.gizmos.Gizmos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
@@ -56,12 +58,15 @@ public class RelicSpawn {
     private static long phaseStartTime;
     private static Relic pickedupRelic = null;
 
-    private static int tick = Floor7.relicSpawnTicks;
+    private static int tick = Floor7.relicSpawnTick;
     private static int placeTick = 0;
     private static boolean sentRelicTimes = false;
 
+    private static boolean spawned = false;
+    private static boolean necronDead = false;
+    private static int spawnTick = 0;
+
     public static void init() {
-        RelicInfo.init();
 
         Events.ON_SERVER_TICK.register(() -> {
 
@@ -69,25 +74,29 @@ public class RelicSpawn {
 
             tick = Math.max(tick - 1, -1);
 
-            if (Phase.inP5()) {
+            if (necronDead) {
                 placeTick++;
+                spawnTick++;
             }
 
+            return false;
+        });
+
+
+        Events.ON_SOUND.register((soundEvent, volume, pitch) -> {
+            if (spawned || !inValidPhase()) return false;
+            if (soundEvent == SoundEvents.WITHER_HURT && volume == 15.0f && pitch == 1.0f) {
+                necronDead = true;
+                phaseStartTime = System.currentTimeMillis();
+                tick = Floor7.relicSpawnTick;
+                placeTick = 0;
+            }
             return false;
         });
 
         Events.ON_LOCATION_CHANGE.register(_ -> {
             if (Location.inDungeon()) {
                 reset();
-            }
-            return false;
-        });
-
-        Events.ON_PHASE_CHANGE.register(() -> {
-            if (Phase.inP5()) {
-                phaseStartTime = System.currentTimeMillis();
-                tick = Floor7.relicSpawnTicks;
-                placeTick = 0;
             }
             return false;
         });
@@ -142,8 +151,23 @@ public class RelicSpawn {
             }
         });
 
+        ClientTickEvents.END_LEVEL_TICK.register(level -> {
+            if (spawned || !inValidPhase()) return;
+
+            level.entitiesForRendering().forEach(entity -> {
+                if (spawned || !necronDead) return;
+                if (entity instanceof ArmorStand armorStand) {
+                    Component custom = armorStand.getItemBySlot(EquipmentSlot.HEAD).getCustomName();
+                    if (custom != null && custom.getString().contains("Relic")) {
+                        Misc.addChatMessage(Component.literal("Relic spawned at: " + spawnTick));
+                        spawned = true;
+                    }
+                }
+            });
+        });
 
         Events.ON_BLOCK_INTERACTION.register(RelicSpawn::blockInteraction);
+
         LevelRenderEvents.COLLECT_SUBMITS.register(RelicSpawn::worldRender);
 
     }
@@ -211,13 +235,15 @@ public class RelicSpawn {
     }
 
     private static void reset() {
-        tick = Floor7.relicSpawnTicks;
+        tick = Floor7.relicSpawnTick;
         pickedupRelic = null;
         for (Relic relic : RelicSpawn.Relic.values()) {
             relic.placedTick = 0;
         }
         sentRelicTimes = false;
         placeTick = 0;
+        necronDead = false;
+        spawned = false;
     }
 
     private static boolean allRelicsPlaced() {
@@ -251,5 +277,13 @@ public class RelicSpawn {
 
     public static int getTick() {
         return tick;
+    }
+
+    public static boolean inValidPhase() {
+        return Phase.inP4() || Phase.inP5();
+    }
+
+    public static boolean isNecronDead() {
+        return necronDead;
     }
 }
