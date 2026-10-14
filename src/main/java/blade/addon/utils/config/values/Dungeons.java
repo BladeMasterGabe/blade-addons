@@ -171,4 +171,7 @@ public class Dungeons {
 
     @ConfigValue
     public static boolean blockExpensiveRerolls = false;
+
+    @ConfigValue
+    public static boolean enableBloodCampTimer = false;
 }

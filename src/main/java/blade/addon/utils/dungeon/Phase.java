@@ -194,6 +194,8 @@ public class Phase {
         return currentPhase > 3;
     }
 
+    public static boolean isCampActive() { return currentPhase == 1;}
+
     public static boolean inP1() {
         return currentPhase == 4 && inFloor7;
     }

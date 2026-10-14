@@ -1,4 +1,4 @@
-package blade.addon.features.dungeon;
+package blade.addon.features.dungeon.blood;
 
 import blade.addon.utils.Location;
 import blade.addon.utils.Misc;

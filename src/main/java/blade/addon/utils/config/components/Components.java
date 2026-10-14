@@ -1,6 +1,8 @@
 package blade.addon.utils.config.components;
 
 import blade.addon.features.dungeon.*;
+import blade.addon.features.dungeon.blood.BloodCampTimer;
+import blade.addon.features.dungeon.blood.BloodNotification;
 import blade.addon.features.dungeon.f7.dragons.DragonSpawnTimer;
 import blade.addon.features.dungeon.f7.invincibility.InvincibilityDisplay;
 import blade.addon.features.dungeon.f7.maxor.crystals.CrystalNotification;
@@ -167,4 +169,7 @@ public class Components {
 
     @ConfigValue
     public static HUDComponent LoadoutDisplay = new LoadoutDisplay();
+
+    @ConfigValue
+    public static HUDComponent bloodCampTimer = new BloodCampTimer();
 }
