@@ -19,12 +19,10 @@ import net.minecraft.world.phys.Vec3;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class TeammateHighlight {
-
     private static final ConcurrentLinkedQueue<Player> teammates = new ConcurrentLinkedQueue<>();
 
     public static void init() {
-
-        Events.ON_ENTITY_TRACKED.register((entity, world) -> {
+        Events.ON_ENTITY_TRACKED.register((entity, _) -> {
             if (!Location.inDungeon()) return false;
             if (entity instanceof Player player) {
                 if (EntityUtil.isARealPlayer(player) && !EntityUtil.isClientPlayer(player) && !teammates.contains(player)) {
@@ -34,12 +32,12 @@ public class TeammateHighlight {
             return false;
         });
 
-        Events.ON_LOCATION_CHANGE.register(location -> {
+        Events.ON_LOCATION_CHANGE.register(_ -> {
             teammates.clear();
             return false;
         });
 
-        ClientTickEvents.END_CLIENT_TICK.register(client -> teammates.removeIf(Entity::isRemoved));
+        ClientTickEvents.END_CLIENT_TICK.register(_ -> teammates.removeIf(Entity::isRemoved));
 
         LevelRenderEvents.COLLECT_SUBMITS.register(TeammateHighlight::renderOutline);
         LevelRenderEvents.COLLECT_SUBMITS.register(TeammateHighlight::renderText);
@@ -62,7 +60,6 @@ public class TeammateHighlight {
 
             float[] rgba = RenderUtils.toFloats(color);
             RenderUtils.drawOutlinedBox(context, EntityUtil.getBox(player), rgba, true);
-
         });
     }
 
@@ -79,7 +76,6 @@ public class TeammateHighlight {
             Component text = Component.literal(player.getName().getString()).withColor(color).append(Component.literal(" [" + DungeonClass.getChar(clazz) + "]").withColor(Constants.YELLOW));
             Vec3 pos = EntityUtil.getLerpedPos(player);
             RenderUtils.renderText(context, text, pos.x(), pos.y() + 2.75, pos.z(), 2);
-
         });
     }
 }

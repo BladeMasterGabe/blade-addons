@@ -11,7 +11,6 @@ import config.practical.hud.HUDCategory;
 import java.util.List;
 
 public class CrystalTimer extends CombineableTickTimer {
-
     public CrystalTimer() {
         super("Crystal spawn timer");
     }

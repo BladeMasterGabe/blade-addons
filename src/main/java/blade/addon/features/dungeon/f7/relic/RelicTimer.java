@@ -1,7 +1,6 @@
 package blade.addon.features.dungeon.f7.relic;
 
 import blade.addon.utils.Constants;
-import blade.addon.utils.Location;
 import blade.addon.utils.config.components.Categories;
 import blade.addon.utils.config.components.CombineableTickTimer;
 import blade.addon.utils.config.values.Floor7;
@@ -10,7 +9,6 @@ import config.practical.hud.HUDCategory;
 import java.util.List;
 
 public class RelicTimer extends CombineableTickTimer {
-
     private static final int GREEN_COLOR = 0xff00ff00;
     private static final int RED_COLOR = 0xffff0000;
 
@@ -37,7 +35,6 @@ public class RelicTimer extends CombineableTickTimer {
     public boolean shouldRender() {
         return false;
         //return Floor7.enableRelicStartTimer && Location.inDungeon() && RelicSpawn.getTick() > -1 && !Floor7.replaceWithProgressBar;
-
     }
 
     @Override

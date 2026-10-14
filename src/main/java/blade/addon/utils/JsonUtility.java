@@ -18,15 +18,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JsonUtility {
-
     public static @NotNull HashMap<String, ArrayList<Split>> readSplits(String path) {
-
         try (InputStream stream = Bladeaddons.class.getResourceAsStream(path)) {
-
             if (stream == null) return new HashMap<>();
 
             try (Reader reader = new InputStreamReader(stream)) {
-
                 JsonElement element = JsonParser.parseReader(reader);
                 return parseSplits(element);
             }
@@ -42,7 +38,6 @@ public class JsonUtility {
         JsonObject object = jsonElement.getAsJsonObject();
 
         for (Map.Entry<String, JsonElement> floorEntry : object.entrySet()) {
-
             ArrayList<Split> splits = new ArrayList<>();
 
             String floorName = floorEntry.getKey();
@@ -55,7 +50,6 @@ public class JsonUtility {
                 String name = dialogueObj.get("name").getAsString();
                 String start = dialogueObj.get("start").getAsString();
                 String end = dialogueObj.get("end").getAsString();
-
 
                 splits.add(new Split(name, start, end, color));
             }

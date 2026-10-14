@@ -13,14 +13,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public class RerollBlocker {
-
     private static final String[] BLOCKED_REROLLS = {"Recombobulator ", "Wither Shield", "Implosion", "Shadow Warp", "Necron's Handle", "Star", "Dark Claymore", "Dye", "Giant's Sword", "Shadow Fury"};
 
     private static boolean blockClick = false;
     private static int containerId = Integer.MIN_VALUE;
 
     public static void init() {
-
         Events.ON_SCREEN.register(_ -> {
             containerId = Integer.MIN_VALUE;
             return false;
@@ -33,9 +31,7 @@ public class RerollBlocker {
 
             if (screen instanceof ContainerScreen containerScreen) {
                 ChestMenu menu = containerScreen.getMenu();
-                if (menu == null) return false;
                 Container container = menu.getContainer();
-                if (container == null) return false;
 
                 if (menu.containerId != containerId) {
                     scanContainer(container);
@@ -50,7 +46,6 @@ public class RerollBlocker {
 
             return blockClick;
         });
-
     }
 
     private static void scanContainer(Container container) {
@@ -84,5 +79,4 @@ public class RerollBlocker {
         }
         return null;
     }
-
 }

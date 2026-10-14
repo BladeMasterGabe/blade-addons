@@ -12,14 +12,12 @@ import net.minecraft.world.entity.ambient.Bat;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BatHighlight {
-
     private static final float[] BAT_HEALTHS = {100.0f, 200.0f, 400.0f, 800.0f};
 
     private static final ConcurrentLinkedQueue<Bat> bats = new ConcurrentLinkedQueue<>();
 
     public static void init() {
-
-        Events.ON_ENTITY_TRACKED.register((entity, world) -> {
+        Events.ON_ENTITY_TRACKED.register((entity, _) -> {
             if (!Location.inDungeon() || !MobHighlight.mobHighlight) return false;
             if (entity instanceof Bat bat && !bats.contains(bat)) {
                 for (float health : BAT_HEALTHS) {
@@ -31,12 +29,12 @@ public class BatHighlight {
             return false;
         });
 
-        Events.ON_LOCATION_CHANGE.register(location -> {
+        Events.ON_LOCATION_CHANGE.register(_ -> {
             bats.clear();
             return false;
         });
 
-        ClientTickEvents.END_CLIENT_TICK.register(client -> bats.removeIf(bat -> bat.isRemoved() || bat.isDeadOrDying()));
+        ClientTickEvents.END_CLIENT_TICK.register(_ -> bats.removeIf(bat -> bat.isRemoved() || bat.isDeadOrDying()));
 
         LevelRenderEvents.COLLECT_SUBMITS.register(BatHighlight::renderFilled);
         LevelRenderEvents.COLLECT_SUBMITS.register(BatHighlight::renderOutline);

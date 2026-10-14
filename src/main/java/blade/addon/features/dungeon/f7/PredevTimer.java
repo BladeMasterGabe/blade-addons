@@ -11,13 +11,11 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 
 public class PredevTimer {
-
     private static long bossEnterTime = 0;
     private static boolean at3rdDev = false;
     private static boolean shouldTrack = false;
 
     public static void init() {
-
         Events.ON_PHASE_CHANGE.register(() -> {
             if (Phase.inP1()) {
                 bossEnterTime = System.currentTimeMillis();
@@ -29,7 +27,7 @@ public class PredevTimer {
             return false;
         });
 
-        Events.ON_LOCATION_CHANGE.register(newLocation -> shouldTrack = false);
+        Events.ON_LOCATION_CHANGE.register(_ -> shouldTrack = false);
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (!shouldTrack || at3rdDev || (!Floor7.predevForAll && !DungeonClass.isClass(DungeonClass.HEALER))) return;
@@ -40,7 +38,7 @@ public class PredevTimer {
             }
         });
 
-        Events.ON_LEAP.register(message -> {
+        Events.ON_LEAP.register(_ -> {
             if (at3rdDev && shouldTrack && (DungeonClass.isClass(DungeonClass.HEALER) || Floor7.predevForAll)) {
                 PersonalBests.predevTime.testNewTime(Component.literal("§aPredev completed in "), bossEnterTime);
                 at3rdDev = false;
@@ -48,8 +46,5 @@ public class PredevTimer {
             }
             return false;
         });
-
     }
-
-
 }

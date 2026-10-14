@@ -1,6 +1,5 @@
 package blade.addon.features.filter;
 
-import blade.addon.utils.Tuple;
 import config.practical.utilities.Constants;
 import config.practical.utilities.DrawHelper;
 import net.minecraft.client.Minecraft;
@@ -12,12 +11,13 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import org.joml.Vector2i;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class FilterEntry extends EditBox {
-
     private static final Identifier CROSS = Identifier.fromNamespaceAndPath(blade.addon.utils.Constants.NAMESPACE, "cross");
 
     private static final int HEIGHT = 20;
@@ -42,15 +42,15 @@ public class FilterEntry extends EditBox {
     }
 
     @Override
-    public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTicks) {
+    public void extractWidgetRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTicks) {
         DrawHelper.drawBackground(graphics, getX(), super.getY(), width - SPRITE_WIDTH_AREA, height, INPUT_COLOR);
-        Tuple<Integer, Integer> pos = getRemovePos();
-        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CROSS, pos.a, pos.b, SPRITE_SIZE, SPRITE_SIZE, 0xffffffff);
+        Vector2i pos = getRemovePos();
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CROSS, pos.x(), pos.y(), SPRITE_SIZE, SPRITE_SIZE, 0xffffffff);
         super.extractWidgetRenderState(graphics, mouseX, mouseY, deltaTicks);
     }
 
     @Override
-    public boolean charTyped(CharacterEvent input) {
+    public boolean charTyped(@NonNull CharacterEvent input) {
         if (!this.canConsumeInput()) {
             return false;
         } else if (input.isAllowedChatCharacter() || isValid(input)) {
@@ -60,7 +60,6 @@ public class FilterEntry extends EditBox {
             return false;
         }
     }
-
 
     private boolean isValid(CharacterEvent input) {
         return input.codepointAsString().contains("§");
@@ -73,7 +72,7 @@ public class FilterEntry extends EditBox {
      * @param text The text to add
      */
     @Override
-    public void insertText(String text) {
+    public void insertText(@NonNull String text) {
         int i = Math.min(getCursorPosition(), this.selectionEnd);
         int j = Math.max(getCursorPosition(), this.selectionEnd);
         int k = this.maxLength - getValue().length() - (i - j);
@@ -110,7 +109,7 @@ public class FilterEntry extends EditBox {
     }
 
     @Override
-    public void setResponder(Consumer<String> changedListener) {
+    public void setResponder(@NonNull Consumer<String> changedListener) {
         this.changedListener = changedListener;
         super.setResponder(changedListener);
     }
@@ -130,13 +129,13 @@ public class FilterEntry extends EditBox {
         return false;
     }
 
-    private Tuple<Integer, Integer> getRemovePos() {
-        return new Tuple<>(getX() + width - SPRITE_SIZE - 5, getY() + (height - SPRITE_SIZE) / 2);
+    private Vector2i getRemovePos() {
+        return new Vector2i(getX() + width - SPRITE_SIZE - 5, getY() + (height - SPRITE_SIZE) / 2);
     }
 
     private boolean inRemovalBounds(double x, double y) {
-        Tuple<Integer, Integer> pos = getRemovePos();
-        return x >= pos.a && x <=  pos.a + SPRITE_SIZE && y >= pos.b && y <= pos.b + SPRITE_SIZE;
+        Vector2i pos = getRemovePos();
+        return x >= pos.x() && x <=  pos.x() + SPRITE_SIZE && y >= pos.y() && y <= pos.y() + SPRITE_SIZE;
     }
 
     @Override

@@ -30,7 +30,6 @@ import config.practical.hud.HUDComponent;
 import config.practical.manager.ConfigValue;
 
 public class Components {
-
     public static void init() {}
 
     @ConfigValue

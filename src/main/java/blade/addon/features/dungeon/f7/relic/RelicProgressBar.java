@@ -1,6 +1,5 @@
 package blade.addon.features.dungeon.f7.relic;
 
-import blade.addon.utils.Location;
 import blade.addon.utils.config.components.Categories;
 import blade.addon.utils.config.values.Floor7;
 import blade.addon.utils.rendering.RenderUtils;
@@ -14,7 +13,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public class RelicProgressBar extends HUDComponent {
-
     public RelicProgressBar() {
         super("Relic progressbar");
     }
@@ -74,6 +72,5 @@ public class RelicProgressBar extends HUDComponent {
         }
 
         RenderUtils.drawCenteredText(guiGraphicsExtractor, Minecraft.getInstance().font, Component.literal(message.toString()), x, y, getWidth(), 0xffffffff);
-
     }
 }

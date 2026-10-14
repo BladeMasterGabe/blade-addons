@@ -25,7 +25,6 @@ import java.util.List;
 
 @Mixin(GuiGraphicsExtractor.class)
 public abstract class GuiGraphicsExtractorMixin {
-
     @Final
     @Shadow
     private Matrix3x2fStack pose;
@@ -33,14 +32,14 @@ public abstract class GuiGraphicsExtractorMixin {
     @Shadow
     public abstract int guiHeight();
 
-    @ModifyVariable(method = "itemCooldown", at = @At("STORE"), ordinal = 0)
-    private float noCooldown(float f) {
-        return Visual.hideCooldown ? 0 : f;
+    @ModifyVariable(method = "itemCooldown", at = @At("STORE"), name = "cooldown")
+    private float noCooldown(float cooldown) {
+        return Visual.hideCooldown ? 0 : cooldown;
     }
 
     @Inject(method = "item(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;III)V", at = @At("HEAD"))
-    private void scaleUp(LivingEntity owner, ItemStack stack, int x, int y, int seed, CallbackInfo ci) {
-        if (Visual.oldPlayerHead && stack.getItem() == Items.PLAYER_HEAD) {
+    private void scaleUp(LivingEntity owner, ItemStack itemStack, int x, int y, int seed, CallbackInfo ci) {
+        if (Visual.oldPlayerHead && itemStack.getItem() == Items.PLAYER_HEAD) {
             float scale = 0.875f;
             int offset = (16 - (int) (scale * 16)) / 2;
 
@@ -51,8 +50,8 @@ public abstract class GuiGraphicsExtractorMixin {
     }
 
     @Inject(method = "item(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;III)V", at = @At("TAIL"))
-    private void scaleDown(LivingEntity owner, ItemStack stack, int x, int y, int seed, CallbackInfo ci) {
-        if (Visual.oldPlayerHead && stack.getItem() == Items.PLAYER_HEAD) {
+    private void scaleDown(LivingEntity owner, ItemStack itemStack, int x, int y, int seed, CallbackInfo ci) {
+        if (Visual.oldPlayerHead && itemStack.getItem() == Items.PLAYER_HEAD) {
             pose.popMatrix();
         }
     }
@@ -70,8 +69,7 @@ public abstract class GuiGraphicsExtractorMixin {
     }
 
     @Inject(method = "tooltip", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix3x2fStack;pushMatrix()Lorg/joml/Matrix3x2fStack;"))
-    private void scaleUpTooltip_head(Font font, List<ClientTooltipComponent> lines, int xo, int yo, ClientTooltipPositioner positioner,
-                                     @Nullable Identifier style, CallbackInfo ci, @Local(name = "h") int h) {
+    private void scaleUpTooltip_head(Font font, List<ClientTooltipComponent> lines, int xo, int yo, ClientTooltipPositioner positioner, @Nullable Identifier style, boolean extraSpaceAfterFirstLine, CallbackInfo ci, @Local(name = "h") int h) {
         if (Visual.tooltipSize == 1) return;
         float newX = xo + 6;
         float newY = yo - ((float) h / 2) * Visual.tooltipSize + 4;
@@ -88,5 +86,4 @@ public abstract class GuiGraphicsExtractorMixin {
         pose.translate(newX, newY);
         pose.scale(Visual.tooltipSize);
     }
-
 }

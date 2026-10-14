@@ -25,7 +25,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractContainerScreen.class)
 public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMenu> extends Screen {
-
     @Shadow
     @Final
     protected T menu;
@@ -37,8 +36,8 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     }
 
     @Inject(method = "extractRenderState", at = @At("TAIL"))
-    private static void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
-        SearchBar.render(graphics, mouseX, mouseY, deltaTicks);
+    private static void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci) {
+        SearchBar.render(graphics, mouseX, mouseY, a);
     }
 
     //"Lnet/minecraft/client/gui/GuiGraphics;renderItem(Lnet/minecraft/world/item/ItemStack;III)V"
@@ -59,18 +58,17 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     }
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-    private void keyPressed(KeyEvent input, CallbackInfoReturnable<Boolean> cir) {
-        if (SearchBar.keyPressed(input)) cir.setReturnValue(false);
+    private void keyPressed(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
+        if (SearchBar.keyPressed(event)) cir.setReturnValue(false);
     }
 
     @Inject(method = "mouseClicked", at = @At("HEAD"))
-    private void onMouseClick(MouseButtonEvent click, boolean doubled, CallbackInfoReturnable<Boolean> cir) {
-        SearchBar.onMouseClick(click);
+    private void onMouseClick(MouseButtonEvent event, boolean doubleClick, CallbackInfoReturnable<Boolean> cir) {
+        SearchBar.onMouseClick(event);
     }
 
-    @Inject(method = "slotClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;onMouseClickAction(Lnet/minecraft/world/inventory/Slot;Lnet/minecraft/world/inventory/ContainerInput;)V"), cancellable = true)
+    @Inject(method = "slotClicked(Lnet/minecraft/world/inventory/Slot;IILnet/minecraft/world/inventory/ContainerInput;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;onMouseClickAction(Lnet/minecraft/world/inventory/Slot;Lnet/minecraft/world/inventory/ContainerInput;)V"), cancellable = true)
     public void protectItem(Slot slot, int slotId, int buttonNum, ContainerInput containerInput, CallbackInfo ci) {
-
         ItemStack held = menu.getCarried();
 
         if (slotId == INVALID_SLOT_ID && ProtectItem.protect(held)) {
@@ -85,7 +83,7 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
             }
         }
 
-        AbstractContainerScreen screen = (AbstractContainerScreen) (Object) this;
+        AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>) (Object) this;
         if (slot != null) {
             if (ProtectItem.blockGUI(screen, slot.getItem())) {
                 ci.cancel();
@@ -93,7 +91,7 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
         }
     }
 
-    @Inject(method = "slotClicked", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "slotClicked(Lnet/minecraft/world/inventory/Slot;IILnet/minecraft/world/inventory/ContainerInput;)V", at = @At("HEAD"), cancellable = true)
     public void slotClicked(Slot slot, int slotId, int buttonNum, ContainerInput containerInput, CallbackInfo ci) {
         if (Events.ON_SLOT_CLICKED.invoke(slotEvent -> slotEvent.onSlot(slot, slotId, buttonNum, containerInput, this))) {
             ci.cancel();

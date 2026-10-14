@@ -6,7 +6,6 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.FormattedCharSequence;
 
 public class TextUtil {
-
     static class StyleTracker {
         boolean isBold = false;
         boolean isItalic = false;
@@ -60,7 +59,6 @@ public class TextUtil {
     private static void acceptStyle(StringBuilder builder, StyleTracker tracker, Style style) {
         if (style == null) return;
 
-        TextColor color = style.getColor();
         /*
         if (color != null && color.getValue() != tracker.currentColor) {
             builder.append('§');

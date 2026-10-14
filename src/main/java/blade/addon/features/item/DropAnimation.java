@@ -7,7 +7,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public class DropAnimation {
-
     private static final int FIX_IN_TICKS = 20;
 
     private static int scheduledFix = 0;
@@ -16,7 +15,7 @@ public class DropAnimation {
     private static boolean cleared = false;
 
     public static void init() {
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+        ClientTickEvents.END_CLIENT_TICK.register(_ -> {
             if (scheduledFix == 0) {
                 clearData();
             } else if (dropped != null){

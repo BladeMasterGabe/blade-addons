@@ -24,9 +24,9 @@ public class ArrowSwapper {
     private static int tick = 0;
 
     public static void init() {
-        ClientTickEvents.END_LEVEL_TICK.register(_ -> {
-            tick = Math.max(0, tick - 1);
-        });
+        ClientTickEvents.END_LEVEL_TICK.register(_ ->
+            tick = Math.max(0, tick - 1)
+        );
 
         Events.ON_GAME_MESSAGE.register(text -> {
             String string = text.getString();

@@ -9,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 
 public class PillarNotification extends CombineableNotification {
-
     public PillarNotification() {
         super("Pillar explode timer");
     }
@@ -33,5 +32,4 @@ public class PillarNotification extends CombineableNotification {
     public List<HUDCategory> categories() {
         return List.of(Categories.P2);
     }
-
 }

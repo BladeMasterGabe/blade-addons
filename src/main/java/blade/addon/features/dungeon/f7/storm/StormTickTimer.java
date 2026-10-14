@@ -11,7 +11,6 @@ import config.practical.hud.HUDCategory;
 import java.util.List;
 
 public class StormTickTimer extends CombineableTickTimer {
-
     private static final int COUNTDOWN_DURATION = 5 * 20;
     private static final int CRUSH_TICK = 29 * 20;
 

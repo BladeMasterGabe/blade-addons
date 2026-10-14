@@ -6,7 +6,6 @@ import config.practical.manager.ConfigValue;
 import net.minecraft.sounds.SoundEvents;
 
 public class Dungeons {
-
     @ConfigValue
     public static boolean highlightItems = false;
 

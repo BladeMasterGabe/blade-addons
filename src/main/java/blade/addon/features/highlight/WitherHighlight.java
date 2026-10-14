@@ -14,14 +14,12 @@ import net.minecraft.world.phys.AABB;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class WitherHighlight {
-
     private static final float WITHER_BORN_HEALTH = 300f;
 
     private static final ConcurrentLinkedQueue<WitherBoss> withers = new ConcurrentLinkedQueue<>();
 
-
     public static void init() {
-        Events.ON_ENTITY_TRACKED.register((entity, world) -> {
+        Events.ON_ENTITY_TRACKED.register((entity, _) -> {
             if (!Location.inDungeon() || !MobHighlight.mobHighlight) return false;
 
             if (Phase.inBoss()) {
@@ -35,12 +33,12 @@ public class WitherHighlight {
             return false;
         });
 
-        Events.ON_LOCATION_CHANGE.register(location -> {
+        Events.ON_LOCATION_CHANGE.register(_ -> {
             withers.clear();
             return false;
         });
 
-        ClientTickEvents.END_CLIENT_TICK.register(client -> withers.removeIf(wither -> wither.isRemoved() || wither.isDeadOrDying()));
+        ClientTickEvents.END_CLIENT_TICK.register(_ -> withers.removeIf(wither -> wither.isRemoved() || wither.isDeadOrDying()));
 
         LevelRenderEvents.COLLECT_SUBMITS.register(WitherHighlight::renderFilled);
         LevelRenderEvents.COLLECT_SUBMITS.register(WitherHighlight::renderOutline);
