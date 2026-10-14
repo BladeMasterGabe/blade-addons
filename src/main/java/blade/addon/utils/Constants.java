@@ -24,6 +24,7 @@ public class Constants {
     public static final int RED = 0xffff5555;
     public static final int LIGHT_PURPLE = 0xffff55ff;
     public static final int YELLOW = 0xffffff55;
+    public static final int WHITE = 0xffffffff;
 
     public static final int FAIL = 0;
     public static final int SUCCESS = 1;

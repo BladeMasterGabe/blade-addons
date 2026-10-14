@@ -15,7 +15,8 @@ public class TextUtil {
         boolean isObfuscated = false;
         int currentColor;
 
-        public StyleTracker() {}
+        public StyleTracker() {
+        }
 
         @Override
         public String toString() {
@@ -53,25 +54,25 @@ public class TextUtil {
      * Grabs the color codes that are missing to
      * make it more convenient to use it in for example
      * chat notifications
+     *
      * @param builder StringBuilder
      * @param tracker StyleTracker, keeps track of previous style
-     * @param style Style, the style of the current char
+     * @param style   Style, the style of the current char
      */
     private static void acceptStyle(StringBuilder builder, StyleTracker tracker, Style style) {
         if (style == null) return;
 
         TextColor color = style.getColor();
-        /*
         if (color != null && color.getValue() != tracker.currentColor) {
             builder.append('§');
-            builder.append(getFormatChar(color.getValue()));
+            builder.append(getFormatChar(color.toString()));
             tracker.currentColor = color.getValue();
-        } */
+        }
 
-        if (style.isObfuscated() &&  !tracker.isObfuscated) {
+        if (style.isObfuscated() && !tracker.isObfuscated) {
             builder.append("§k");
             tracker.isObfuscated = true;
-        }  else if (!style.isObfuscated() && tracker.isObfuscated) {
+        } else if (!style.isObfuscated() && tracker.isObfuscated) {
             tracker.isObfuscated = false;
         }
 
@@ -85,14 +86,14 @@ public class TextUtil {
         if (style.isStrikethrough() && !tracker.isStrikeThrough) {
             builder.append("§m");
             tracker.isStrikeThrough = true;
-        }  else if (!style.isStrikethrough() && tracker.isStrikeThrough) {
+        } else if (!style.isStrikethrough() && tracker.isStrikeThrough) {
             tracker.isStrikeThrough = false;
         }
 
         if (style.isUnderlined() && !tracker.isUnderlined) {
             builder.append("§n");
             tracker.isUnderlined = true;
-        }  else if (!style.isUnderlined() && tracker.isUnderlined) {
+        } else if (!style.isUnderlined() && tracker.isUnderlined) {
             tracker.isUnderlined = false;
         }
 
@@ -104,22 +105,31 @@ public class TextUtil {
         }
     }
 
-    /*
-    private static char getFormatChar(int color) {
-        for (ChatFormatting format: ChatFormatting.values()) {
-            Integer colorValue = format.getColor();
-            if (colorValue == null) continue;
 
-            if (colorValue == color) {
-                return format.getChar();
-            }
-        }
-
-        return '0';
-    } */
+    private static char getFormatChar(String name) {
+        return switch (name) {
+            case "black" -> '0';
+            case "dark_blue" -> '1';
+            case "dark_green" -> '2';
+            case "dark_aqua" -> '3';
+            case "dark_red" -> '4';
+            case "dark_purple" -> '5';
+            case "gold" -> '6';
+            case "gray" -> '7';
+            case "dark_gray" -> '8';
+            case "blue" -> '9';
+            case "green" -> 'a';
+            case "aqua" -> 'b';
+            case "red" -> 'c';
+            case "light_purple" -> 'd';
+            case "yellow" -> 'e';
+            case "white" -> 'f';
+            default -> 'f';
+        };
+    }
 
     public static String formatTicks(int tick) {
-       return Constants.DECIMAL_FORMAT.format(tick * Constants.TICK_DURATION);
+        return Constants.DECIMAL_FORMAT.format(tick * Constants.TICK_DURATION);
     }
 
     public static String capitaliseFirst(String message) {
