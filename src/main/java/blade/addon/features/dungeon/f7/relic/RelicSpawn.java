@@ -84,7 +84,7 @@ public class RelicSpawn {
 
 
         Events.ON_SOUND.register((soundEvent, volume, pitch) -> {
-            if (spawned || !inValidPhase()) return false;
+            if (spawned || !inValidPhase() || necronDead) return false;
             if (soundEvent == SoundEvents.WITHER_HURT && volume == 15.0f && pitch == 1.0f) {
                 necronDead = true;
                 phaseStartTime = System.currentTimeMillis();
