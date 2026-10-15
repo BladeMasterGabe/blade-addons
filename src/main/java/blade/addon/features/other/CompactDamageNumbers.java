@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class CompactDamageNumbers {
 
-    private static final Pattern DAMAGE_PATTERN = Pattern.compile("^✧?✯?((?:\\d+,?)*)✧?✯?❤?$");
+    private static final Pattern DAMAGE_PATTERN = Pattern.compile("^✧?✯?((?:\\d+,?)*)✧?✯?❤?✷?$");
 
     private static final String[] CRIT_COLORS = {"§e", "§f", "§c", "§6"};
 
@@ -30,6 +30,7 @@ public class CompactDamageNumbers {
                 String name = component.getString();
 
                 Matcher matcher = DAMAGE_PATTERN.matcher(name);
+                System.out.println(name);
                 if (!matcher.find()) return false;
 
                 String numFound = matcher.group(1);
