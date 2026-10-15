@@ -15,7 +15,8 @@ public class BossHealthOverlayMixin {
 
     @Redirect(
             method = "extractRenderState",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/LerpingBossEvent;getName()Lnet/minecraft/network/chat/Component;")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/LerpingBossEvent;getName()Lnet/minecraft/network/chat/Component;"),
+            require = 0
     )
     private Component modifyBossBarText(LerpingBossEvent bossBar) {
         if (!Dungeons.bossHealthNumbers) return bossBar.getName();
