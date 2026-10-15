@@ -3,6 +3,8 @@ package blade.addon.mixin;
 import blade.addon.utils.config.values.Dungeons;
 import blade.addon.utils.debug.Debug;
 import blade.addon.utils.rendering.RenderUtils;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.gui.components.BossHealthOverlay;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.network.chat.Component;
@@ -13,13 +15,14 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(BossHealthOverlay.class)
 public class BossHealthOverlayMixin {
 
-    @Redirect(
+    @WrapOperation(
             method = "extractRenderState",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/LerpingBossEvent;getName()Lnet/minecraft/network/chat/Component;"),
-            require = 0
+            require = 1
     )
-    private Component modifyBossBarText(LerpingBossEvent bossBar) {
-        if (!Dungeons.bossHealthNumbers) return bossBar.getName();
+    private Component modifyBossBarText(LerpingBossEvent bossBar, Operation<Component> original) {
+        Component previous = original.call(bossBar);
+        if (!Dungeons.bossHealthNumbers) return previous;
 
         try {
             Component text = bossBar.getName();
