@@ -30,7 +30,6 @@ public class CompactDamageNumbers {
                 String name = component.getString();
 
                 Matcher matcher = DAMAGE_PATTERN.matcher(name);
-                System.out.println(name);
                 if (!matcher.find()) return false;
 
                 String numFound = matcher.group(1);
