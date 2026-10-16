@@ -37,14 +37,14 @@ public class SheepHighlight {
     }
 
     private static void renderFilled(LevelRenderContext context) {
-        if (!MobHighlight.highlightSheep || MobHighlight.renderFilled()) return;
+        if (!MobHighlight.highlightSheep || !MobHighlight.renderFilled()) return;
 
         float[] rgba = RenderUtils.toFloats(MobHighlight.sheepFilledColor);
         sheeps.forEach(entity -> RenderUtils.drawFilledBox(context, EntityUtil.getBox(entity), rgba));
     }
 
     private static void renderOutline(LevelRenderContext context) {
-        if (!MobHighlight.highlightSheep || MobHighlight.renderOutline()) return;
+        if (!MobHighlight.highlightSheep || !MobHighlight.renderOutline()) return;
 
         float[] rgba = RenderUtils.toFloats(MobHighlight.sheepFilledColor);
         sheeps.forEach(entity -> RenderUtils.drawOutlinedBox(context, EntityUtil.getBox(entity), rgba));

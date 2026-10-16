@@ -51,14 +51,14 @@ public class WitherHighlight {
     }
 
     private static void renderFilled(LevelRenderContext context) {
-        if (!MobHighlight.mobHighlight || MobHighlight.renderFilled() || MobHighlight.dontRenderHighlight) return;
+        if (!MobHighlight.mobHighlight || !MobHighlight.renderFilled() || MobHighlight.dontRenderHighlight) return;
 
         float[] rgba = RenderUtils.toFloats(MobHighlight.witherFilledColor);
         withers.forEach(entity -> RenderUtils.drawFilledBox(context, getBox(entity), rgba));
     }
 
     private static void renderOutline(LevelRenderContext context) {
-        if (!MobHighlight.mobHighlight || MobHighlight.renderOutline() || MobHighlight.dontRenderHighlight) return;
+        if (!MobHighlight.mobHighlight || !MobHighlight.renderOutline() || MobHighlight.dontRenderHighlight) return;
 
         float[] rgba = RenderUtils.toFloats(MobHighlight.witherOutlineColor);
         withers.forEach(entity -> RenderUtils.drawOutlinedBox(context, getBox(entity), rgba));

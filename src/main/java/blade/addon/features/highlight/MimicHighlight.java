@@ -25,15 +25,15 @@ public class MimicHighlight {
             return false;
         });
 
-       Events.ON_BLOCK_ENTITY.register(blockEntity -> {
-          if (!Location.inDungeon()) return false;
-          if (blockEntity instanceof TrappedChestBlockEntity mimic && !mimics.contains(mimic)) {
-              mimics.add(mimic);
-          }
-           return false;
-       });
+        Events.ON_BLOCK_ENTITY.register(blockEntity -> {
+            if (!Location.inDungeon()) return false;
+            if (blockEntity instanceof TrappedChestBlockEntity mimic && !mimics.contains(mimic)) {
+                mimics.add(mimic);
+            }
+            return false;
+        });
 
-       ClientTickEvents.END_CLIENT_TICK.register(client -> mimics.removeIf(BlockEntity::isRemoved));
+        ClientTickEvents.END_CLIENT_TICK.register(_ -> mimics.removeIf(BlockEntity::isRemoved));
 
         LevelRenderEvents.COLLECT_SUBMITS.register(MimicHighlight::renderFilled);
         LevelRenderEvents.COLLECT_SUBMITS.register(MimicHighlight::renderOutline);
@@ -41,14 +41,14 @@ public class MimicHighlight {
 
 
     private static void renderFilled(LevelRenderContext context) {
-        if (!MobHighlight.highlightMimicChests || MobHighlight.renderFilled()) return;
+        if (!MobHighlight.highlightMimicChests || !MobHighlight.renderFilled()) return;
 
         float[] rgba = RenderUtils.toFloats(MobHighlight.mimicFilledColor);
         mimics.forEach(mimic -> RenderUtils.drawFilledBox(context, box.move(mimic.getBlockPos()), rgba));
     }
 
     private static void renderOutline(LevelRenderContext context) {
-        if (!MobHighlight.highlightMimicChests || MobHighlight.renderOutline()) return;
+        if (!MobHighlight.highlightMimicChests || !MobHighlight.renderOutline()) return;
 
         float[] rgba = RenderUtils.toFloats(MobHighlight.mimicOutlineColor);
         mimics.forEach(mimic -> RenderUtils.drawOutlinedBox(context, box.move(mimic.getBlockPos()), rgba));

@@ -43,14 +43,14 @@ public class BatHighlight {
     }
 
     private static void renderFilled(LevelRenderContext context) {
-        if (!MobHighlight.mobHighlight || MobHighlight.renderFilled()) return;
+        if (!MobHighlight.mobHighlight || !MobHighlight.renderFilled()) return;
 
         float[] rgba = RenderUtils.toFloats(MobHighlight.batFilledColor);
         bats.forEach(entity -> RenderUtils.drawFilledBox(context, EntityUtil.getBox(entity), rgba));
     }
 
     private static void renderOutline(LevelRenderContext context) {
-        if (!MobHighlight.mobHighlight || MobHighlight.renderOutline()) return;
+        if (!MobHighlight.mobHighlight || !MobHighlight.renderOutline()) return;
 
         float[] rgba = RenderUtils.toFloats(MobHighlight.batOutlineColor);
         bats.forEach(entity -> RenderUtils.drawOutlinedBox(context, EntityUtil.getBox(entity), rgba));
