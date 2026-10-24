@@ -10,9 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Inventory.class)
 public class InventoryMixin {
-
     @Inject(method = "setItem", at = @At("HEAD"))
-    private void setStack(int slot, ItemStack stack, CallbackInfo ci) {
-        Events.ON_SLOT_CHANGE.invoke(slotChangeEvent -> slotChangeEvent.onSlotChange(slot, stack));
+    private void setStack(int slot, ItemStack itemStack, CallbackInfo ci) {
+        Events.ON_SLOT_CHANGE.invoke(slotChangeEvent -> slotChangeEvent.onSlotChange(slot, itemStack));
     }
 }

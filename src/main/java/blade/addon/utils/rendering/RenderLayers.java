@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 
 public class RenderLayers {
-
     public static final RenderType FILLED = RenderType.create("filled-layer",
             RenderSetup.builder(RenderPipelines.FILLED).setLayeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING).createRenderSetup());
 

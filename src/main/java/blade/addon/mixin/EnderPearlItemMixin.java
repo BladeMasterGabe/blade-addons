@@ -14,10 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EnderpearlItem.class)
 public class EnderPearlItemMixin {
-
     @Inject(method = "use", at=@At("HEAD"))
-    private void use(Level world, Player user, InteractionHand hand, CallbackInfoReturnable<Boolean> cir) {
-        if (Visual.stopPearlSwing && EntityUtil.isClientPlayer(user)) {
+    private void use(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<Boolean> cir) {
+        if (Visual.stopPearlSwing && EntityUtil.isClientPlayer(player)) {
             SwingAnimation.ignoreNext(2);
         }
     }

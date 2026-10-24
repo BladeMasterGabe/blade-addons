@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Notifications {
-
     private static final String filePath = FolderUtility.CONFIG_PATH + FolderUtility.NOTIFICATIONS_NAME;
     private static final String NOTIFICATIONS_NAME = "notifications";
 
@@ -44,7 +43,7 @@ public class Notifications {
             }
 
             if (Debug.sendNotiDebug) {
-                Misc.addChatMessage(Component.literal(message.replaceAll("§", "&")));
+                Misc.addChatMessage(Component.literal(message.replace("§", "&")));
             }
 
             for (Notification notification : notifications) {
@@ -82,7 +81,6 @@ public class Notifications {
     }
 
     public static void save() {
-
         JsonObject obj = new JsonObject();
         Gson gson = new Gson();
 
@@ -92,7 +90,6 @@ public class Notifications {
         try (FileWriter writer = new FileWriter(filePath)) {
             writer.write(tree.toString());
         } catch (IOException ignored) {
-
         }
     }
 
@@ -122,7 +119,6 @@ public class Notifications {
             JsonObject notification = notificationElement.getAsJsonObject();
 
             try {
-
                 if (!notification.has("matchString")) continue;
                 String matchString = notification.get("matchString").getAsString();
 

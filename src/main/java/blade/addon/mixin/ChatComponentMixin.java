@@ -10,7 +10,6 @@ import net.minecraft.client.gui.components.ChatComponent;
 
 @Mixin(ChatComponent.class)
 public interface ChatComponentMixin {
-
     @Accessor("trimmedMessages")
     List<GuiMessage.Line> getVisibleMessages();
 
@@ -22,5 +21,4 @@ public interface ChatComponentMixin {
 
     @Invoker("getScale")
     double scale();
-
 }

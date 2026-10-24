@@ -12,7 +12,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public class HeldItemToolTip extends HUDComponent {
-
     private Component tooltip = Component.literal("Some toolTip");
     private int color = 0xffffffff;
     private int heldItemFade = 0;

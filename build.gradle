@@ -19,6 +19,7 @@ java {
 }
 
 loom {
+    accessWidenerPath = file("src/main/resources/blade-addons.accesswidener")
     runConfigs.named("client") {
         setIdeConfigGenerated(true)
         vmArgs("-XX:+IgnoreUnrecognizedVMOptions",
@@ -39,7 +40,6 @@ repositories {
     maven { url = 'https://jitpack.io' }
     maven { url = "https://maven.terraformersmc.com/" }
     maven { url = 'https://repo.hypixel.net/repository/Hypixel/' }
-
 }
 
 dependencies {
@@ -102,4 +102,3 @@ publishing {
         // retrieving dependencies.
     }
 }
-

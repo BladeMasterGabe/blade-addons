@@ -1,6 +1,5 @@
 package blade.addon.features.notifications;
 
-import blade.addon.utils.Tuple;
 import config.practical.utilities.Constants;
 import config.practical.utilities.DrawHelper;
 import net.minecraft.client.Minecraft;
@@ -12,9 +11,10 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import org.joml.Vector2i;
+import org.jspecify.annotations.NonNull;
 
 class NotificationEntry extends AbstractWidget {
-
     private static final Identifier CROSS = Identifier.fromNamespaceAndPath(blade.addon.utils.Constants.NAMESPACE, "cross");
 
     private static final int PADDING = 5;
@@ -34,7 +34,7 @@ class NotificationEntry extends AbstractWidget {
     }
 
     @Override
-    protected void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTicks) {
+    protected void extractWidgetRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTicks) {
         int x = getX();
         int y = getY();
         int width = getWidth();
@@ -47,12 +47,11 @@ class NotificationEntry extends AbstractWidget {
         drawText(graphics, textRenderer, notification.getMatchString(), x + PADDING, y);
         drawText(graphics, textRenderer, notification.getNotificationString(), x + PADDING * 2 + TEXT_SPACE, y);
 
-        Tuple<Integer, Integer> pos = getRemovePos();
-        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CROSS, pos.a, pos.b, SPRITE_SIZE, SPRITE_SIZE, 0xffffffff);
+        Vector2i pos = getRemovePos();
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, CROSS, pos.x(), pos.y(), SPRITE_SIZE, SPRITE_SIZE, 0xffffffff);
     }
 
     private void drawText(GuiGraphicsExtractor context, Font textRenderer, String string, int x, int y) {
-
         Component text;
         if (string.isEmpty()) {
             text = Component.literal("Empty");
@@ -67,13 +66,13 @@ class NotificationEntry extends AbstractWidget {
         context.disableScissor();
     }
 
-    private Tuple<Integer, Integer> getRemovePos() {
-        return new Tuple<>(getX() + width - SPRITE_SIZE - 5, getY() + (height - SPRITE_SIZE) / 2);
+    private Vector2i getRemovePos() {
+        return new Vector2i(getX() + width - SPRITE_SIZE - 5, getY() + (height - SPRITE_SIZE) / 2);
     }
 
     private boolean inRemovalBounds(double x, double y) {
-        Tuple<Integer, Integer> pos = getRemovePos();
-        return x >= pos.a && x <=  pos.a + SPRITE_SIZE && y >= pos.b && y <= pos.b + SPRITE_SIZE;
+        Vector2i pos = getRemovePos();
+        return x >= pos.x() && x <=  pos.x() + SPRITE_SIZE && y >= pos.y() && y <= pos.y() + SPRITE_SIZE;
     }
 
     @Override
@@ -93,7 +92,6 @@ class NotificationEntry extends AbstractWidget {
     }
 
     @Override
-    protected void updateWidgetNarration(NarrationElementOutput builder) {
-
+    protected void updateWidgetNarration(@NonNull NarrationElementOutput builder) {
     }
 }

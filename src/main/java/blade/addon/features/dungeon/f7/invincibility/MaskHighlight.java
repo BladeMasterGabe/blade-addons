@@ -44,5 +44,4 @@ public class MaskHighlight {
         if (id.contains("BONZO_MASK")) return MaskType.BONZO;
         return MaskType.NONE;
     }
-
 }

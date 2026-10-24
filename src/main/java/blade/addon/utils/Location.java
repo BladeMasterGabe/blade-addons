@@ -68,7 +68,7 @@ public enum Location {
         Location location;
 
         try {
-            location = Location.valueOf(locationName.toUpperCase().replace(" ", "_").replaceAll("'", ""));
+            location = Location.valueOf(locationName.toUpperCase().replace(" ", "_").replace("'", ""));
         } catch (IllegalArgumentException ignored) {
             location = Location.UNKNOWN;
         }

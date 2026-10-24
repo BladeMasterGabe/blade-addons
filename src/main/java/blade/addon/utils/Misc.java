@@ -38,7 +38,6 @@ public class Misc {
 
     public static void addChatMessage(Component text) {
         try {
-            if (INSTANCE == null) return;
             Gui gameHud = INSTANCE.gui;
             ChatComponent hud = gameHud.hud.getChat();
             forceMainThread(() -> hud.addClientSystemMessage(Component.literal(ExtraOptions.textPrefix).append(text)));

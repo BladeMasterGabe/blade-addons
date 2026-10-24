@@ -3,7 +3,6 @@ package blade.addon.utils.config.values;
 import config.practical.manager.ConfigValue;
 
 public class Visual {
-
     @ConfigValue
     public static boolean hideFireInf5 = false;
 
@@ -69,5 +68,4 @@ public class Visual {
 
     @ConfigValue
     public static boolean compactDamage = false;
-
 }

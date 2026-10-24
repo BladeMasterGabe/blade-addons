@@ -25,7 +25,6 @@ import java.util.List;
  */
 
 public class LeapDisplay extends HUDComponent {
-
     private static final AABB[] REGIONS = {
             new AABB(91, 105, 46, 111, 127, 123),
             new AABB(17, 106, 121, 108, 145, 143),
@@ -34,14 +33,11 @@ public class LeapDisplay extends HUDComponent {
             new AABB(3, 5, 0, 128, 48, 140)
     };
 
-    private static final AABB RED_PILLAR_BOX = AABB.ofSize(new Vec3(100, 116, 46), 2, 2, 2);
-    private static final AABB SS_BOX = new AABB(107, 119, 92, 108, 121, 95);
     private static final AABB EE2_BOX = new AABB(57, 108, 130, 59, 110, 132);
     private static final AABB HEE2_BOX = new AABB(59, 132, 138, 62, 133, 140);
     private static final AABB EE3_BOX = new AABB(1, 108, 103, 3, 110, 105);
     private static final AABB CORE_BOX = new AABB(53.5, 114, 49.5, 55.5, 116, 51.5);
     private static final AABB RELIC_BOX = new AABB(51.5, 3, 73.5, 57.5, 8, 79.5);
-
 
     private int count = 0;
     private int currentSpot = -1;

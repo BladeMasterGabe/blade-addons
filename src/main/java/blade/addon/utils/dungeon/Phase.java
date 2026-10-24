@@ -164,7 +164,7 @@ public class Phase {
             Misc.addChatMessage(split.createNameText().append(split.createTimeText()));
         }
         if (!currentSplits.isEmpty()) {
-            double time = currentSplits.getLast().getTimeDiffrence();
+            double time = currentSplits.getLast().getTimeDifference();
             Component timeLost = Component.literal("§aApproximately §e" + Constants.DECIMAL_FORMAT.format(time) + "s §alost to lag.");
             Misc.addChatMessage(timeLost);
         }

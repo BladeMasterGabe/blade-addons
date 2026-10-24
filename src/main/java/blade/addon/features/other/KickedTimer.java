@@ -11,7 +11,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public class KickedTimer extends HUDComponent {
-
     private static boolean isKicked = false;
     private static long kickedTime = 0;
 
@@ -23,7 +22,6 @@ public class KickedTimer extends HUDComponent {
         Events.ON_GAME_MESSAGE.register(text -> {
             if (!ExtraOptions.enableKickedTimer || isKicked) return false;
             String string = text.getString();
-            if (string == null) return false;
 
             if (string.equals("You were kicked while joining that server!") || string.equals("You are no longer allowed to access this instance!")) {
                 kickedTime = System.currentTimeMillis();
@@ -66,5 +64,4 @@ public class KickedTimer extends HUDComponent {
         double drawnTime = Math.min(diff / 1000.0, 60.0);
         RenderUtils.drawPrefixedTimer(this, guiGraphicsExtractor, "Time kicked", drawnTime);
     }
-
 }

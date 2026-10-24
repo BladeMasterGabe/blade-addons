@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CombinedNotification extends HUDComponent {
-
     private final CombineableNotification[] notifications;
 
     public CombinedNotification(CombineableNotification... notifications) {
@@ -74,6 +73,5 @@ public class CombinedNotification extends HUDComponent {
     @Override
     public void renderEditTemplate(@NonNull GuiGraphicsExtractor graphics) {
         RenderUtils.drawCenteredText(graphics, Minecraft.getInstance().font, Component.literal("Some notification"), getScaledX(), getScaledY(), 130, 0xffffffff);
-
     }
 }
