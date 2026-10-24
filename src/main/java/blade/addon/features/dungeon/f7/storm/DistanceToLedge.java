@@ -17,7 +17,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public class DistanceToLedge extends HUDComponent {
-
     private static final AABB YELLOW_PAD = new AABB(20, 163, 0, 58, 213, 107);
     private static final double MIN_X = 33.704;
 

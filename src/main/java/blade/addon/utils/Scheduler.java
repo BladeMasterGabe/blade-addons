@@ -39,7 +39,7 @@ public class Scheduler {
 
             if (scheduledCommand != null) {
                 LocalPlayer player = minecraftClient.player;
-                if (player != null && player.connection != null) {
+                if (player != null) {
                     player.connection.sendCommand(scheduledCommand);
                     scheduledCommand = null;
                 }

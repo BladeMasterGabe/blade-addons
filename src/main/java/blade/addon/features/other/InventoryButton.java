@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.function.Supplier;
 
 public class InventoryButton {
-
     private static final Identifier BUTTON_TEXTURE = Identifier.withDefaultNamespace("widget/button");
     private static final int SIZE = 18;
     private static final ArrayList<InventoryButton> inventoryButtons = new ArrayList<>();
@@ -29,7 +28,7 @@ public class InventoryButton {
         this.index = inventoryButtons.size();
     }
 
-    public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTicks) {
+    public void render(GuiGraphicsExtractor graphics) {
         String str = command.get();
         if (str == null ||str.isEmpty()) return;
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BUTTON_TEXTURE, x, y, SIZE, SIZE);
@@ -58,7 +57,7 @@ public class InventoryButton {
 
     public static void renderAll(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTicks) {
         for (InventoryButton button : inventoryButtons) {
-            button.render(graphics, mouseX, mouseY, deltaTicks);
+            button.render(graphics);
         }
     }
 }

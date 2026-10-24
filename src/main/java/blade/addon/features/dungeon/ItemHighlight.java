@@ -23,11 +23,9 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ItemHighlight {
-
     private static final HashSet<String> ITEMS = new HashSet<>(List.of("Revive Stone", "Trap", "Decoy", "Inflatable Jerry", "Defuse Kit", "Dungeon Chest Key", "Treasure Talisman", "Architect's First Draft", "Spirit Leap", "Healing VIII Splash Potion", "Training Weights", "Candycomb"));
 
     private static final ConcurrentHashMap<ItemEntity, Integer> trackedItems = new ConcurrentHashMap<>();
-
 
     public static void init() {
         ClientTickEvents.END_CLIENT_TICK.register(minecraftClient -> {
@@ -45,7 +43,7 @@ public class ItemHighlight {
             });
         });
 
-        ClientEntityEvents.ENTITY_UNLOAD.register((entity, world) -> {
+        ClientEntityEvents.ENTITY_UNLOAD.register((entity, _) -> {
             if (entity instanceof ItemEntity item) {
                 trackedItems.remove(item);
             }
@@ -57,7 +55,6 @@ public class ItemHighlight {
     private static void render(LevelRenderContext context) {
         if (!Dungeons.highlightItems) return;
         double tickProgress = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
-
 
         trackedItems.forEach((itemEntity, integer) -> {
             double x =  Mth.lerp(tickProgress, itemEntity.xOld, itemEntity.getX());

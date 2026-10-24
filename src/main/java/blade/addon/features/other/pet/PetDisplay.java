@@ -13,7 +13,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public class PetDisplay extends HUDComponent {
-
     public PetDisplay() {
         super( "Selected pet display");
     }

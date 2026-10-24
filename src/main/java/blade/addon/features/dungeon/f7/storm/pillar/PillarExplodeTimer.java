@@ -12,7 +12,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public class PillarExplodeTimer extends HUDComponent {
-
     public PillarExplodeTimer() {
         super("Pillar explode timer");
     }

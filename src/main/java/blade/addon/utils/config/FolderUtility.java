@@ -8,7 +8,6 @@ import blade.addon.utils.times.PersonalBests;
 import java.io.File;
 
 public class FolderUtility {
-
     public static final String OLD_PATH = "./config/";
     public static final String CONFIG_PATH = "config/blade-addons/";
 
@@ -34,5 +33,4 @@ public class FolderUtility {
             Debug.LOGGER.error("Failed to load protected item data or personal best data");
         }
     }
-
 }

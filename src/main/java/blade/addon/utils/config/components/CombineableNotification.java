@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.NonNull;
 
 public abstract class CombineableNotification extends HUDComponent {
-
     public CombineableNotification(String info) {
         super(info);
     }
@@ -41,7 +40,6 @@ public abstract class CombineableNotification extends HUDComponent {
 
     public void draw(GuiGraphicsExtractor graphicsExtractor, int x, int y) {
         Font textRenderer = Minecraft.getInstance().font;
-        if (textRenderer == null) return;
         RenderUtils.drawCenteredText(graphicsExtractor, textRenderer, getText(), x, y, getWidth(), 0xffffffff);
     }
 }

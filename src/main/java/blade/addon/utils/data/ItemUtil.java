@@ -11,7 +11,6 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
 
 public class ItemUtil {
-
     public static String getId(ItemStack item) {
         CustomData nbt = item.get(DataComponents.CUSTOM_DATA);
         if (nbt == null) return null;
@@ -67,8 +66,7 @@ public class ItemUtil {
         ItemLore lore = item.get(DataComponents.LORE);
         if (lore == null) return null;
 
-        List<Component> lines = lore.lines();
-        return lines;
+        return lore.lines();
     }
 
     public static Component findLore(ItemStack item, String contain) {
@@ -100,14 +98,4 @@ public class ItemUtil {
         }
         return false;
     }
-
-    public static boolean containsNBT(ItemStack item, String contain) {
-        CustomData nbt = item.get(DataComponents.CUSTOM_DATA);
-        if (nbt == null) {
-            return false;
-        }
-
-        return  nbt.toString().contains(contain);
-    }
-
 }

@@ -17,7 +17,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public class InvincibilityDisplay extends HUDComponent {
-
     private static final Identifier BONZO_SPRITE = Identifier.fromNamespaceAndPath(Constants.NAMESPACE, "bonzo-mask");
     private static final Identifier SPIRIT_SPRITE = Identifier.fromNamespaceAndPath(Constants.NAMESPACE, "spirit-mask");
     private static final Identifier PHOENIX_SPRITE = Identifier.fromNamespaceAndPath(Constants.NAMESPACE, "phoenix");
@@ -46,9 +45,7 @@ public class InvincibilityDisplay extends HUDComponent {
 
     @Override
     public boolean shouldRender() {
-        if (!Dungeons.displayInvincibilityTimer || !Location.inDungeon()) {
-            return false;
-        }
+        if (!Dungeons.displayInvincibilityTimer || !Location.inDungeon()) return false;
 
         switch (Dungeons.displayWhen) {
             case BOSS_ONLY -> {
@@ -94,9 +91,8 @@ public class InvincibilityDisplay extends HUDComponent {
     }
 
     private static Component getText(int ticks, boolean isOn, String string) {
-        if (ticks > 0) {
-            return Component.literal("§c" + string).append(formatTimer(ticks));
-        } else {
+        if (ticks > 0) return Component.literal("§c" + string).append(formatTimer(ticks));
+        else {
             String color = isOn ? "§e" : "§a";
             return Component.literal(color + string);
         }
@@ -106,10 +102,7 @@ public class InvincibilityDisplay extends HUDComponent {
         int color = (ticks > 0 ? Constants.RED : isOn ? Constants.YELLOW : Constants.GREEN);
         context.fill(x, y, x + SPRITE_SIZE, y + SPRITE_SIZE, color);
         context.blitSprite(RenderPipelines.GUI_TEXTURED, identifier, x, y, SPRITE_SIZE, SPRITE_SIZE, 0xffffffff);
-        if (ticks > 0) {
-            context.text(Minecraft.getInstance().font, timerText, x + TEXT_HEIGHT * 2, y, 0xffffffff, true);
-        }
-
+        if (ticks > 0) context.text(Minecraft.getInstance().font, timerText, x + TEXT_HEIGHT * 2, y, 0xffffffff, true);
     }
 
     @Override
