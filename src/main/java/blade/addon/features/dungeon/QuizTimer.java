@@ -18,7 +18,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public class QuizTimer extends HUDComponent {
-
     private static final int START_DURATION = 220;
     private static final int QUESTION_DURATION = 100;
 
@@ -30,20 +29,23 @@ public class QuizTimer extends HUDComponent {
     }
 
     public void init() {
-
         Events.ON_GAME_MESSAGE.register(text -> {
             if (!Location.inDungeon()) return false;
 
             String string = text.getString();
-            if (string.equals("[STATUE] Oruo the Omniscient: I am Oruo the Omniscient. I have lived many lives. I have learned all there is to know.")) {
-                tick = START_DURATION;
-                stage = 1;
-            } else if (string.equals("[STATUE] Oruo the Omniscient: 2 questions left... Then you will have proven your worth to me!")) {
-                tick = QUESTION_DURATION;
-                stage = 2;
-            } else if (string.equals("[STATUE] Oruo the Omniscient: One more question!")) {
-                tick = QUESTION_DURATION;
-                stage = 3;
+            switch (string) {
+                case "[STATUE] Oruo the Omniscient: I am Oruo the Omniscient. I have lived many lives. I have learned all there is to know." -> {
+                    tick = START_DURATION;
+                    stage = 1;
+                }
+                case "[STATUE] Oruo the Omniscient: 2 questions left... Then you will have proven your worth to me!" -> {
+                    tick = QUESTION_DURATION;
+                    stage = 2;
+                }
+                case "[STATUE] Oruo the Omniscient: One more question!" -> {
+                    tick = QUESTION_DURATION;
+                    stage = 3;
+                }
             }
 
             return false;
@@ -89,7 +91,6 @@ public class QuizTimer extends HUDComponent {
     @Override
     public void render(@NonNull GuiGraphicsExtractor guiGraphicsExtractor) {
         Font textRenderer = Minecraft.getInstance().font;
-        if (textRenderer == null) return;
 
         if (Dungeons.quizProgress) {
             Component drawnText = Component.literal("Quiz " + "(").withColor(ExtraOptions.timerPrefixColor)
@@ -101,6 +102,4 @@ public class QuizTimer extends HUDComponent {
             RenderUtils.drawPrefixedTimer(this, guiGraphicsExtractor, "Quiz", tick);
         }
     }
-
-
 }

@@ -4,9 +4,7 @@ import blade.addon.features.other.InventoryButton;
 import config.practical.manager.ConfigValue;
 
 public class Buttons {
-
     public static void init() {
-
     }
 
     @ConfigValue
@@ -30,7 +28,6 @@ public class Buttons {
     @ConfigValue
     public static String command7 = "";
 
-
     public static InventoryButton button1 = new InventoryButton(77, 5, () -> command1);
 
     public static InventoryButton button2 = new InventoryButton(77, 23, () -> command2);
@@ -44,7 +41,4 @@ public class Buttons {
     public static InventoryButton button6 = new InventoryButton(133, 61, () -> command6);
 
     public static InventoryButton button7 = new InventoryButton(151, 61, () -> command7);
-
-
-
 }

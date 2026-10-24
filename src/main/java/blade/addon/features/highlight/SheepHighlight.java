@@ -12,12 +12,10 @@ import net.minecraft.world.entity.animal.sheep.Sheep;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SheepHighlight {
-
     private static final ConcurrentLinkedQueue<Sheep> sheeps = new ConcurrentLinkedQueue<>();
 
     public static void init() {
-
-        Events.ON_ENTITY_SPAWNED.register((entity, world) -> {
+        Events.ON_ENTITY_SPAWNED.register((entity, _) -> {
             if (!Location.inDungeon()) return false;
             if (entity instanceof Sheep sheep && !sheeps.contains(sheep)) {
                 sheeps.add(sheep);
@@ -25,12 +23,12 @@ public class SheepHighlight {
             return false;
         });
 
-        Events.ON_LOCATION_CHANGE.register(location -> {
+        Events.ON_LOCATION_CHANGE.register(_ -> {
             sheeps.clear();
             return false;
         });
 
-        ClientTickEvents.END_CLIENT_TICK.register(client -> sheeps.removeIf(sheep -> sheep.isRemoved() || sheep.isDeadOrDying()));
+        ClientTickEvents.END_CLIENT_TICK.register(_ -> sheeps.removeIf(sheep -> sheep.isRemoved() || sheep.isDeadOrDying()));
 
         LevelRenderEvents.COLLECT_SUBMITS.register(SheepHighlight::renderFilled);
         LevelRenderEvents.COLLECT_SUBMITS.register(SheepHighlight::renderOutline);
@@ -49,5 +47,4 @@ public class SheepHighlight {
         float[] rgba = RenderUtils.toFloats(MobHighlight.sheepFilledColor);
         sheeps.forEach(entity -> RenderUtils.drawOutlinedBox(context, EntityUtil.getBox(entity), rgba));
     }
-
 }

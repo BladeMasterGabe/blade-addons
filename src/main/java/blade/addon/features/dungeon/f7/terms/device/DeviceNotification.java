@@ -9,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 
 public class DeviceNotification extends CombineableNotification {
-
     public DeviceNotification() {
         super("Device done notification");
     }

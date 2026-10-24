@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 import net.minecraft.network.chat.Component;
 
 public class TitleHider {
-
     private static final Pattern TERMINALS_DONE_PATTERN = Pattern.compile("^(\\w+) (activated|completed) a (terminal|device|lever)! \\((\\d)/(\\d)\\)$");
 
     public static boolean shouldHideTitle(Component title) {
@@ -23,7 +22,5 @@ public class TitleHider {
         } else {
             return false;
         }
-
     }
-
 }

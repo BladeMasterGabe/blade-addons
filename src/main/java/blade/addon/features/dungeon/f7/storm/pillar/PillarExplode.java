@@ -8,7 +8,6 @@ import blade.addon.utils.events.Events;
 import net.minecraft.sounds.SoundEvents;
 
 public class PillarExplode {
-
     private static final int TOTAL_TICKS = 20;
     static int tick = 0;
 
@@ -18,7 +17,6 @@ public class PillarExplode {
             if (!Location.inDungeon() || !Phase.inP2()) return false;
 
             String string = text.getString();
-            if (string == null) return false;
 
             if (string.equals("[BOSS] Storm: Oof") || string.equals("[BOSS] Storm: Ouch, that hurt!")) {
                 tick = TOTAL_TICKS;

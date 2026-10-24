@@ -66,9 +66,7 @@ public class InvincibilityTimer {
 
 
         Events.ON_GAME_MESSAGE.register(text -> {
-            if (Location.inDungeon()) {
-                parseMessage(text);
-            }
+            if (Location.inDungeon()) parseMessage(text);
             return false;
         });
     }
@@ -95,26 +93,19 @@ public class InvincibilityTimer {
     private static void parseMessage(Component message) {
         String string = message.getString();
 
-        Matcher matcher = BONZO_PATTERN.matcher(string);
-        if (matcher.matches()) {
+        if (BONZO_PATTERN.matcher(string).matches()) {
             bonzoMaskTicks = BONZO_MASK_COOLDOWN;
-            if (Dungeons.showProcTitle && !DeviceNotifier.at4thDev()) {
-                Misc.setTitle(Component.literal("Bonzo"));
-            }
+            if (Dungeons.showProcTitle && !DeviceNotifier.at4thDev()) Misc.setTitle(Component.literal("Bonzo"));
             Components.invincibilityDurationDisplay.proc();
         }
         if (string.equals("Second Wind Activated! Your Spirit Mask saved your life!")) {
             spiritMaskTicks = SPIRIT_MASK_COOLDOWN;
-            if (Dungeons.showProcTitle && !DeviceNotifier.at4thDev()) {
-                Misc.setTitle(Component.literal("Spirit"));
-            }
+            if (Dungeons.showProcTitle && !DeviceNotifier.at4thDev()) Misc.setTitle(Component.literal("Spirit"));
             Components.invincibilityDurationDisplay.proc();
         }
         if (string.equals("Your Phoenix Pet saved you from certain death!")) {
             phoenixTicks = PHOENIX_COOLDOWN;
-            if (Dungeons.showProcTitle && !DeviceNotifier.at4thDev()) {
-                Misc.setTitle(Component.literal("Phoenix"));
-            }
+            if (Dungeons.showProcTitle && !DeviceNotifier.at4thDev()) Misc.setTitle(Component.literal("Phoenix"));
             Components.invincibilityDurationDisplay.proc();
         }
     }
@@ -122,14 +113,10 @@ public class InvincibilityTimer {
     public static double getBonzoProgress() {
         return (double) bonzoMaskTicks / BONZO_MASK_COOLDOWN;
     }
-
     public static double getSpiritProgress() {
         return (double) spiritMaskTicks / SPIRIT_MASK_COOLDOWN;
     }
-
     public static boolean spiritMaskUsed() {
         return spiritMaskTicks > 0;
     }
-
-
 }

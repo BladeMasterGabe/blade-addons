@@ -12,7 +12,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.List;
 
 public class LoadoutDisplay extends HUDComponent {
-
     public LoadoutDisplay() {
         super("Loadout display");
     }
@@ -44,8 +43,6 @@ public class LoadoutDisplay extends HUDComponent {
 
     @Override
     public void render(@NonNull GuiGraphicsExtractor guiGraphicsExtractor) {
-        Font textRenderer = Minecraft.getInstance().font;
-        if (textRenderer == null) return;
         RenderUtils.drawPrefixedText(this, guiGraphicsExtractor, "Loadout", LoadoutData.getCurrentLoadout());
     }
 }

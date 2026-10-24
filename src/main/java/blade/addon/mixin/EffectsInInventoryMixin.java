@@ -13,9 +13,8 @@ import java.util.Collection;
 
 @Mixin(EffectsInInventory.class)
 public class EffectsInInventoryMixin {
-
     @Inject(method = "extractEffects", at=@At("HEAD"), cancellable = true)
-    public void renderEffects(GuiGraphicsExtractor context, Collection<MobEffectInstance> effects, int x, int height, int mouseX, int mouseY, int width, CallbackInfo ci) {
+    public void renderEffects(GuiGraphicsExtractor graphics, Collection<MobEffectInstance> activeEffects, int x0, int yStep, int mouseX, int mouseY, int maxWidth, CallbackInfo ci) {
         if (Visual.hideStatusOverLay) {
             ci.cancel();
         }

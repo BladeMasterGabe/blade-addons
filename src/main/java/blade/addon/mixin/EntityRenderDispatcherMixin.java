@@ -22,11 +22,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Objects;
+
 @Mixin(EntityRenderDispatcher.class)
 public class EntityRenderDispatcherMixin {
-
     @Inject(method = "shouldRender", at = @At("TAIL"), cancellable = true)
-    private <E extends Entity> void shouldRender(E entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
+    private <E extends Entity> void shouldRender(E entity, Frustum culler, double camX, double camY, double camZ, float partialTicks, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof Player player) {
             LocalPlayer clientPlayer = Minecraft.getInstance().player;
             if (clientPlayer != null) {
@@ -59,7 +60,7 @@ public class EntityRenderDispatcherMixin {
 
             //Pretty much just hides the bobber if it's too close
             //its def not exact, but it's good enough for now
-            Vec3 pos = bobber.getInterpolation().position();
+            Vec3 pos = Objects.requireNonNull(bobber.getInterpolation().target()).position();
             if (clientPlayer.position().distanceTo(pos) < 2 && bobber.tickCount < 6 && pos.y > clientPlayer.getY() + 1.2 && clientPlayer.getXRot() > -60) {
                 cir.setReturnValue(false);
             }
@@ -70,6 +71,5 @@ public class EntityRenderDispatcherMixin {
                 cir.setReturnValue(false);
             }
         }
-
     }
 }
