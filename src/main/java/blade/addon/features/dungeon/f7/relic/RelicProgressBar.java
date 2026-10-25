@@ -1,5 +1,6 @@
 package blade.addon.features.dungeon.f7.relic;
 
+import blade.addon.utils.Location;
 import blade.addon.utils.config.components.Categories;
 import blade.addon.utils.config.values.Floor7;
 import blade.addon.utils.rendering.RenderUtils;

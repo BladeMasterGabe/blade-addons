@@ -1,8 +1,6 @@
 package blade.addon.mixin;
 
 import blade.addon.features.item.DropAnimation;
-import com.llamalad7.mixinextras.expression.Definition;
-import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.player.FirstPersonHandsAndItems;
 import net.minecraft.client.player.LocalPlayer;
@@ -21,24 +19,21 @@ public abstract class FirstPersonHandsAndItemsMixin {
 
     @Shadow
     private float mainHandHeight;
-
-    @Definition(id = "getMainHandItem", method = "Lnet/minecraft/client/player/LocalPlayer;getMainHandItem()Lnet/minecraft/world/item/ItemStack;")
-    @Expression("? = ?.getMainHandItem()")
-    @Inject(method = "tick", at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER))
-    private void test(CallbackInfo ci, @Local(argsOnly = true, name = "player") LocalPlayer player, @Local(name = "nextMainHand") ItemStack nextMainHand) {
+    @Inject(method = "tick", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/player/LocalPlayer;getMainHandItem()Lnet/minecraft/world/item/ItemStack;"))
+    private void test(CallbackInfo ci, @Local LocalPlayer clientPlayer, @Local ItemStack itemStack) {
         if (!DropAnimation.shouldProceed()) return;
-        if (nextMainHand.getItem() == Items.AIR) return;
+        if (itemStack.getItem() == Items.AIR) return;
         ItemStack prevDropped = DropAnimation.getPrevDroppedItem();
         int slot = DropAnimation.getSelectedSlot();
         if (prevDropped == null) return;
 
         //check if item has changed
-        if (prevDropped.getItem() != nextMainHand.getItem()) {
+        if (prevDropped.getItem() != itemStack.getItem()) {
             DropAnimation.clearData();
         }
 
         //check if slot has changed
-        if (slot != player.getInventory().getSelectedSlot()) {
+        if (slot != clientPlayer.getInventory().getSelectedSlot()) {
             DropAnimation.clearData();
         }
     }
