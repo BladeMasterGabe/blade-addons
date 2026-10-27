@@ -4,7 +4,7 @@ A dungeons mod made to port dungeons features to the newer Minecraft versions. H
 his amazing mods like Valley addons.
 
 # Current Version
-26.1.2
+26.3
 
 # Dependencies
 - Hypixel Mod API https://modrinth.com/mod/hypixel-mod-api
