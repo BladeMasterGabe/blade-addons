@@ -145,16 +145,18 @@ public class RunStartValidator extends CombineableNotification {
 
     private HashMap<String, Integer> readScoreBoard(Scoreboard scoreboard) {
         HashMap<String, Integer> map = new HashMap<>();
+        try {
+            for (PlayerTeam team : scoreboard.getPlayerTeams()) {
+                String teamStr = team.getPlayerPrefix().getString() + team.getPlayerSuffix().getString();
+                Matcher matcher = CLASS_PATTERN.matcher(teamStr);
+                if (!matcher.find()) continue;
 
-        for (PlayerTeam team : scoreboard.getPlayerTeams()) {
-            String teamStr = team.getPlayerPrefix().getString() + team.getPlayerSuffix().getString();
-            Matcher matcher = CLASS_PATTERN.matcher(teamStr);
-            if (!matcher.find()) continue;
-
-            String clazz = matcher.group(1);
-            Integer count = map.get(clazz);
-            if (count == null) count = 0;
-            map.put(clazz, count + 1);
+                String clazz = matcher.group(1);
+                Integer count = map.get(clazz);
+                if (count == null) count = 0;
+                map.put(clazz, count + 1);
+            }
+        } catch (NullPointerException ignored) {
         }
         return map;
     }

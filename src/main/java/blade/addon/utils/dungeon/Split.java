@@ -9,7 +9,7 @@ import net.minecraft.network.chat.MutableComponent;
 
 public class Split {
     public enum TimerType {
-        TICK_TIME("Tick time"), DIFFERENCE("difference");
+        TICK_TIME("Tick time"), DIFFERENCE("Difference");
 
         private final String label;
 

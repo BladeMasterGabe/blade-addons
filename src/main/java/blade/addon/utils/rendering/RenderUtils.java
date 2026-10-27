@@ -4,28 +4,27 @@ import blade.addon.features.highlight.MobHighlight;
 import blade.addon.utils.Constants;
 import blade.addon.utils.config.values.ExtraOptions;
 import blade.addon.utils.config.values.Floor7;
-import blade.addon.utils.data.EntityUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import config.practical.hud.HUDComponent;
+import net.fabricmc.fabric.api.client.rendering.v1.SubmitRenderPhases;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.feature.TextFeatureRenderer;
-import net.minecraft.util.LightCoordsUtil;
-import net.fabricmc.fabric.api.client.rendering.v1.SubmitRenderPhases;
 import net.minecraft.gizmos.GizmoStyle;
 import net.minecraft.gizmos.Gizmos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 public class RenderUtils {
     private static final float TEXT_SCALE = 0.025f;
+    private static final float LINE_WIDTH = 2f;
 
     public static float[] toFloats(int argb) {
         float r = ((argb >> 16) & 0xFF) / 255f;
@@ -111,15 +110,30 @@ public class RenderUtils {
         renderText(context, text, pos.x, pos.y, pos.z, scale);
     }
 
+    private static void renderLine(Matrix4f matrix, VertexConsumer consumer, Vec3 start, Vec3 direction, float r, float g, float b, float a) {
+        consumer.addVertex(matrix, (float) start.x, (float) start.y, (float) start.z)
+                .setColor(r, g, b, a)
+                .setLineWidth(LINE_WIDTH)
+                .setNormal((float) direction.x, (float) direction.y, (float) direction.z);
+        consumer.addVertex(matrix, (float) (start.x + direction.x), (float) (start.y + direction.y), (float) (start.z + direction.z))
+                .setColor(r, g, b, a)
+                .setLineWidth(LINE_WIDTH)
+                .setNormal((float) direction.x, (float) direction.y, (float) direction.z);
+    }
+
     public static void renderLineTo(LevelRenderContext context, double x, double y, double z, int color) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
 
-        Vec3 playerPos = EntityUtil.getLerpedPos(player);
-        double eyeHeight = player.getEyeHeight();
-        Vector3f lookAt = new Vector3f(0, 0, -1f).rotate(context.levelState().cameraRenderState.orientation);
-        Vec3 startPos = playerPos.add(0, eyeHeight, 0).add(lookAt.x, lookAt.y, lookAt.z);
-        Gizmos.line(startPos, new Vec3(x, y, z), color);
+        Vec3 playerPos = player.getPosition(context.levelState().worldPartialTicks);
+        Vec3 startPos = playerPos.add(player.getForward().add(0, player.getEyeHeight(), 0));
+        Vec3 direction = new Vec3(x, y, z).subtract(startPos);
+
+        float[] colors = toFloats(color);
+        PoseStack stack = cameraRelativePose(context, 0, 0, 0);
+        context.submitNodeCollector().submitCustomGeometry(stack, RenderLayers.LINE,
+                (pose, consumer) -> renderLine(pose.pose(), consumer, startPos, direction, colors[0], colors[1], colors[2], colors[3]));
+        stack.popPose();
     }
 
     public static void renderLineTo(LevelRenderContext context, Vec3 pos, int color) {
