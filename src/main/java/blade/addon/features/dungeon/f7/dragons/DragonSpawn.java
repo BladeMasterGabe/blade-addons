@@ -2,6 +2,7 @@ package blade.addon.features.dungeon.f7.dragons;
 
 import blade.addon.utils.Misc;
 import blade.addon.utils.config.values.Floor7;
+import blade.addon.utils.dungeon.DungeonClass;
 import blade.addon.utils.events.Events;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
@@ -11,6 +12,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class DragonSpawn {
     public static final int SPAWN_DURATION = 100;
+    private static Dragon firstDragon = null;
+    private static Dragon secondDragon = null;
 
     private static final ConcurrentLinkedQueue<Dragon> dragons = new ConcurrentLinkedQueue<>();
 
@@ -43,6 +46,9 @@ public class DragonSpawn {
         dragon.tick = SPAWN_DURATION;
         dragons.add(dragon);
 
+        if (firstDragon == null) firstDragon = dragon;
+        else if (secondDragon == null && dragon != firstDragon) secondDragon = dragon;
+
         if (Floor7.sendSoundOnDragSpawn) {
             Misc.sendSound(SoundEvents.NOTE_BLOCK_PLING.value(), 0.75f, 1);
         }
@@ -63,9 +69,16 @@ public class DragonSpawn {
         for (Dragon dragon : Dragon.values()) {
             dragon.tick = 0;
         }
+        secondDragon = null;
+        firstDragon = null;
     }
 
     public static Dragon getDragon() {
+        if (Floor7.ignoreFirstDragon && DungeonClass.isClass(DungeonClass.HEALER)) {
+            if (firstDragon == null || secondDragon == null) return Dragon.NONE;
+            if (dragons.size() > 1) return secondDragon;
+        }
+
         Dragon dragon = dragons.peek();
         if (dragon == null) return Dragon.NONE;
         return dragon;

@@ -245,6 +245,7 @@ public class Config {
         dragon.add(new ConfigBool(Component.literal("Send sound on dragon spawn"), () -> Floor7.sendSoundOnDragSpawn, bool -> Floor7.sendSoundOnDragSpawn = bool));
         dragon.add(new ConfigBool(Component.literal("Render dragon health"), () -> Floor7.dragonHealth, bool -> Floor7.dragonHealth = bool));
         dragon.add(new ConfigBool(Component.literal("Render dragon spawn tracer"), () -> Floor7.dragonTracer, bool -> Floor7.dragonTracer = bool));
+        dragon.add(new ConfigBool(Component.literal("Ignore first drag as healer"), () -> Floor7.ignoreFirstDragon, bool -> Floor7.ignoreFirstDragon = bool));
         floor7.add(dragon);
 
         ConfigSection stormlb = new ConfigSection(Component.literal("Storm lb"));

@@ -187,4 +187,7 @@ public class Floor7 {
 
     @ConfigValue
     public static boolean displayDistanceOnAllClasses = false;
+
+    @ConfigValue
+    public static boolean ignoreFirstDragon = true;
 }
