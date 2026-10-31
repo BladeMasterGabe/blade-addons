@@ -1,5 +1,6 @@
 package blade.addon.utils.debug;
 
+import blade.addon.features.dungeon.f7.dragons.DragonSpawn;
 import blade.addon.features.dungeon.f7.relic.RelicSpawn;
 import blade.addon.utils.Constants;
 import blade.addon.utils.Location;
@@ -77,6 +78,12 @@ public class Debug {
                     Events.ON_GAME_MESSAGE.invoke(gameMessageEvent -> gameMessageEvent.onGameMessage(Component.literal(message)));
                     return Constants.SUCCESS;
                 })))
+
+                .then(ClientCommands.literal("testDragon").executes(_ -> {
+                    Misc.addChatMessage(Component.literal("testing dragons: "));
+                    DragonSpawn.debug();
+                    return Constants.SUCCESS;
+                }))
 
                 .then(ClientCommands.literal("relic")
                         .then(ClientCommands.literal("set")

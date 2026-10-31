@@ -54,18 +54,6 @@ public class EntityRenderDispatcherMixin {
             if (Location.inDungeon() && MobHighlight.hideSheep) cir.setReturnValue(false);
         }
 
-        if (Visual.oldFishingRod && entity instanceof FishingHook bobber) {
-            LocalPlayer clientPlayer = Minecraft.getInstance().player;
-            if (clientPlayer == null || bobber.getOwner() != clientPlayer) return;
-
-            //Pretty much just hides the bobber if it's too close
-            //its def not exact, but it's good enough for now
-            Vec3 pos = Objects.requireNonNull(bobber.getInterpolation().target()).position();
-            if (clientPlayer.position().distanceTo(pos) < 2 && bobber.tickCount < 6 && pos.y > clientPlayer.getY() + 1.2 && clientPlayer.getXRot() > -60) {
-                cir.setReturnValue(false);
-            }
-        }
-
         if (entity instanceof ArmorStand armorStand && MobHighlight.hideNoneStaredNameTags) {
             if (MobHighlight.nonStaredTags.contains(armorStand)) {
                 cir.setReturnValue(false);

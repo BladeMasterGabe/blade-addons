@@ -1,6 +1,7 @@
 package blade.addon.features.dungeon.f7.dragons;
 
 import blade.addon.utils.Misc;
+import blade.addon.utils.Scheduler;
 import blade.addon.utils.config.values.Floor7;
 import blade.addon.utils.dungeon.DungeonClass;
 import blade.addon.utils.events.Events;
@@ -82,5 +83,12 @@ public class DragonSpawn {
         Dragon dragon = dragons.peek();
         if (dragon == null) return Dragon.NONE;
         return dragon;
+    }
+
+    public static void debug() {
+        addDragon(Dragon.RED);
+        Scheduler.scheduleTask(() -> addDragon(Dragon.BLUE), 60);
+        Scheduler.scheduleTask(() -> addDragon(Dragon.GREEN), 60 + 120*1);
+        Scheduler.scheduleTask(() -> addDragon(Dragon.ORANGE), 60 + 120*2);
     }
 }

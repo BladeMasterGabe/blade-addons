@@ -40,9 +40,6 @@ public class Visual {
     public static boolean oldPlayerHead = false;
 
     @ConfigValue
-    public static boolean oldFishingRod = false;
-
-    @ConfigValue
     public static boolean stopShovelFlattening = false;
 
     @ConfigValue
